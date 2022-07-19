@@ -82,7 +82,8 @@ const App = () => {
     return (
         <div className='container' >
             <div className='board-container' >
-                <h2>Board ({roundName})</h2>
+                <h2>BOARD</h2>
+                <p>{roundName}</p>
                 <ul className='board'>
                     {board.map((card, index) => {
                         let { rank, suit } = card;
@@ -106,7 +107,7 @@ const App = () => {
                 <button onClick={handleReset} >Reset</button>
             </div>
             <div className='hole-container' >
-                <h2>Hole</h2>
+                <h2>HOLE</h2>
                 <ul className='hole'>
                     {hole.map((card, index) => (
                             <li key={index}>
