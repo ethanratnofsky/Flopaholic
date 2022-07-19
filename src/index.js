@@ -13,7 +13,7 @@ import CardBack from './components/CardBack';
 
 // Constants
 const BOARD_SIZE = 5;
-const POCKET_SIZE = 2;
+const HOLE_SIZE = 2;
 const ROUNDS = {
     'Pre-Flop': 0,
     'Flop': 3,
@@ -21,11 +21,11 @@ const ROUNDS = {
     'River': 5
 }
 
-// Set up board and pocket
+// Set up board and hole
 const deck = new Deck();
 
-let pocket = [];
 let board = [];
+let hole = [];
 
 const newHand = () => {
     // Reset deck
@@ -38,10 +38,10 @@ const newHand = () => {
         board.push(deck.draw());
     }
 
-    // Reset pocket
-    pocket = [];
-    for (let i = 0; i < POCKET_SIZE; i++) {
-        pocket.push(deck.draw());
+    // Reset hole
+    hole = [];
+    for (let i = 0; i < HOLE_SIZE; i++) {
+        hole.push(deck.draw());
     }
 }
 
@@ -63,7 +63,7 @@ const App = () => {
         setNumShown(ROUNDS[roundName]);
     }, [round, roundName]);
 
-    // Reset board and pocket
+    // Reset board and hole
     const handleReset = () => {
         newHand();
         setRound(0);
@@ -98,9 +98,9 @@ const App = () => {
             <button onClick={handleNextRound} >Next Round</button>
             <button onClick={handleReset} >Reset</button>
             <div>
-                <h2>Pocket</h2>
-                <ul className='pocket'>
-                    {pocket.map((card, index) => (
+                <h2>Hole</h2>
+                <ul className='hole'>
+                    {hole.map((card, index) => (
                             <li key={index}>
                                 <div className='card-container'>
                                     <Card rank={card.rank} suit={card.suit} />
