@@ -1,0 +1,15 @@
+button {
+    margin: 2px;
+}
+
+.board, .pocket {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.card-container {
+    margin: 10px;
+}
