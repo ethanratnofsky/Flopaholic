@@ -21,7 +21,7 @@ p {
 button {
     margin: 2px 5px;
     background-image: linear-gradient(to bottom, #FF7E31, #E62C03);
-    box-shadow: rgba(0, 0, 0, 0.1) 0 3px 5px;
+    box-shadow: #be2705 0 3px;
     border-radius: 9px;
     color: white;
     padding: 10px 20px;
@@ -32,7 +32,7 @@ button {
 }
 
 button:hover {
-    background-image: linear-gradient(to bottorgb(224, 108, 40)E31, #d02702);
+    background-image: linear-gradient(to bottom, #FF7E31, #d02702);
     text-decoration: none;
     cursor: pointer;
 }
