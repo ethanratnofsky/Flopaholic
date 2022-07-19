@@ -1,15 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-// Classes
-import Deck from './card-deck/Deck';
+// API
+import Deck from './api/Deck';
 
 // Styles
 import './index.css';
 
 // Components
 import Card from './components/Card';
-import CardBack from './components/CardBack';
 
 // Constants
 const BOARD_SIZE = 5;
@@ -81,23 +80,32 @@ const App = () => {
 
     // Render
     return (
-        <div>
-            <div>
+        <div className='container' >
+            <div className='board-container' >
                 <h2>Board ({roundName})</h2>
                 <ul className='board'>
-                    {board.map((card, index) => (
+                    {board.map((card, index) => {
+                        let { rank, suit } = card;
+
+                        if (index >= numShown) {
+                            rank = suit = null;
+                        }
+
+                        return (
                             <li key={index}>
                                 <div className='card-container'>
-                                    {index < numShown ? <Card rank={card.rank} suit={card.suit} /> : <CardBack />}
+                                    <Card rank={rank} suit={suit} />
                                 </div>
                             </li>
-                        )
-                    )}
+                        );
+                    })}
                 </ul>
             </div>
-            <button onClick={handleNextRound} >Next Round</button>
-            <button onClick={handleReset} >Reset</button>
-            <div>
+            <div className='button-container'>
+                <button onClick={handleNextRound} >Next Round</button>
+                <button onClick={handleReset} >Reset</button>
+            </div>
+            <div className='hole-container' >
                 <h2>Hole</h2>
                 <ul className='hole'>
                     {hole.map((card, index) => (
