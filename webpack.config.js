@@ -5,8 +5,7 @@ module.exports = {
   entry: "./src/index.js",
   module: {
     rules: [
-      { test: /\.(png|jpe?g|gif)$/i, use: "file-loader" },
-      { test: /\.svg$/, use: "svg-inline-loader" },
+      { test: /\.(png|jpe?g|gif|svg)$/i, use: "file-loader" },
       { test: /\.css$/, use: ["style-loader", "css-loader"] },
       { test: /\.(js)$/, use: "babel-loader" },
     ],

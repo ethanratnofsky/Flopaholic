@@ -1,22 +1,24 @@
 import React from 'react';
 
-// Images
-import CardBackImg from '../images/cards/card_back.png';
-
 // Styles
 import './Card.css';
 
 const Card = ({ rank, suit }) => {
-    if (!rank || !suit) 
-        return (<img className='card' src={CardBackImg} alt='Card Back' />);
+    let srcImg, altText;
 
-    try {
-        return (
-            <img className='card' src={require(`../images/cards/${rank.toLowerCase()}_of_${suit.toLowerCase()}.png`).default} alt={`${rank} of ${suit}`} />
-        );
-    } catch (e) {
-        throw new Error(`Invalid card: ${rank} of ${suit}`);
+    if (rank && suit) {
+        try {
+            srcImg = require(`../images/cards/${rank.toLowerCase()}_of_${suit.toLowerCase()}.svg`).default;
+            altText = `${rank} of ${suit}`;
+        } catch (e) {
+            throw new Error(`Invalid card: ${rank} of ${suit}`);
+        }
+    } else {
+        srcImg = require('../images/cards/card_back.svg').default;
+        altText = 'Card Back';
     }
+
+    return <img className='card' src={srcImg} alt={altText} />
 }
 
 export default Card;
