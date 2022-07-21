@@ -189,7 +189,7 @@ const App = () => {
 
     const handleEvaluateHand = () => {
         const handRank = evaulateHand([...board, ...hole]);
-        setHandRankName(roundNum === 3 ? handRank.name : 'Nice Try ;)');
+        setHandRankName(roundNum === 3 ? handRank.name : 'Nice Try 😉');
     }
 
     // Update round state
