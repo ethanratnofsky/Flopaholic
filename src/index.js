@@ -195,9 +195,8 @@ const App = () => {
     useEffect(() => {
         setRound(ROUNDS[roundNum]);
         setHandRankName('');
+        if (DEBUG) handleEvaluateHand();
     }, [roundNum]);
-
-    if (DEBUG) handleEvaluateHand();
 
     // Render
     return (
