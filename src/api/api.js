@@ -36,30 +36,28 @@ const groupByRank = cards => {
 }
 
 /**
- * Returns an object with an array of 4 cards that include four of a kind and sorted kicker cards.
+ * Returns an object with an array of 4 cards that are four of a kind and sorted kicker cards.
  * If no four of a kind is found, returns false.
- * @pre cards is an array of < 8 cards
+ * If there are multiple ranks of four of a kind, returns the highest ranked.
  * @param {Array[Card]} cards - An array of cards.
- * @returns {Object|false} An object with an array of 5 cards that include four of a kind and sorted kicker cards.
+ * @returns {Object|false} An object with an array of 4 cards that are four of a kind, sorted kicker cards, and value.
  */
 export const getFourOfAKind = cards => {
-    // Ensure input is an array of < 8 cards
-    if (cards.length >= 8)
-        throw new Error('getFourOfAKind: cards must be an array of < 8 cards');
-
     const sortedCards = sortByRank(cards);
     const groups = groupByRank(sortedCards);
+    let value = -1;
+    let quads = [];
+    let kickers = [];
     
-    for (const [rank, group] of Object.entries(groups)) {
-        if (group.length === 4) {
-            return {
-                cards: group,
-                kickers: sortedCards.filter(card => card.rank !== rank),
-            };
+    for (const group of Object.values(groups)) {
+        if (group.length === 4 && group[0].value > value) {
+            value = group[0].value;
+            quads = group;
+            kickers = sortedCards.filter(card => card.value !== value);
         }
     }
-
-    return false;
+    
+    return (value >= 0) ? { value, cards: quads, kickers } : false;
 }
 
 /**
@@ -128,4 +126,30 @@ export const getStraight = (cards, allowWheel = true) => {
     }
 
     return false;
+}
+
+/**
+ * Returns an object with an array of 3 cards that are three of a kind and sorted kicker cards.
+ * If no three of a kind is found, returns false.
+ * If there are multiple ranks of three of a kind, returns the highest ranked.
+ * Does not check for a full house.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Object|false} An object with an array of 3 cards that are three of a kind, sorted kicker cards, and value.
+ */
+ export const getThreeOfAKind = cards => {
+    const sortedCards = sortByRank(cards);
+    const groups = groupByRank(sortedCards);
+    let value = -1;
+    let trips = [];
+    let kickers = [];
+    
+    for (const group of Object.values(groups)) {
+        if (group.length === 3 && group[0].value > value) {
+            value = group[0].value;
+            trips = group;
+            kickers = sortedCards.filter(card => card.value !== value);
+        }
+    }
+    
+    return (value >= 0) ? { value, cards: trips, kickers } : false;
 }

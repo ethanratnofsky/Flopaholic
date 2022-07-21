@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFourOfAKind, getFlush, getStraight } from './api/api';
+import { getFourOfAKind, getThreeOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -12,7 +12,7 @@ import './index.css';
 import Card from './components/Card';
 
 // Constants
-const DEBUG = true;
+const DEBUG = false;
 const BOARD_SIZE = 5;
 const HOLE_SIZE = 2;
 const ROUNDS = [
@@ -139,6 +139,24 @@ const App = () => {
         console.log(deals);
     }
 
+    // FOR DEBUGGING THREE OF A KIND
+    const redealUntilThreeOfAKind = () => {
+        let threeOfAKind;
+        let deals = [];
+
+        do {
+            newHand();
+            threeOfAKind = getThreeOfAKind([...board, ...hole]);
+            deals.push({ board, hole });
+        } while (!threeOfAKind);
+
+        forceUpdate();
+        console.log(`Three of A Kind, ${threeOfAKind.cards[0].rank}s`);
+        console.log(threeOfAKind);
+        console.log(`Redealt ${deals.length} times`);
+        console.log(deals);
+    }
+
     // Update round state
     useEffect(() => {
         setRound(ROUNDS[roundNum]);
@@ -153,6 +171,7 @@ const App = () => {
                     <button onClick={redealUntilFourOfAKind}>Four of A Kind</button>
                     <button onClick={redealUntilFlush}>Flush</button>
                     <button onClick={redealUntilStraight}>Straight</button>
+                    <button onClick={redealUntilThreeOfAKind}>Three of A Kind</button>
                 </div>
             )}
             <div className='board-container'>
