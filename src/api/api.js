@@ -39,6 +39,7 @@ const groupByRank = cards => {
  * Returns an object with an array of 4 cards that are four of a kind and sorted kicker cards.
  * If no four of a kind is found, returns false.
  * If there are multiple ranks of four of a kind, returns the highest ranked.
+ * Does not check for higher ranking hands made with kickers.
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Object|false} An object with an array of 4 cards that are four of a kind, sorted kicker cards, and value.
  */
@@ -47,22 +48,29 @@ export const getFourOfAKind = cards => {
     const groups = groupByRank(sortedCards);
     let value = -1;
     let quads = [];
-    let kickers = [];
     
+    // Find the highest four of a kind if exists
     for (const group of Object.values(groups)) {
         if (group.length === 4 && group[0].value > value) {
             value = group[0].value;
             quads = group;
-            kickers = sortedCards.filter(card => card.value !== value);
         }
     }
     
-    return (value >= 0) ? { value, cards: quads, kickers } : false;
+    // Four of a kind was found
+    if (value >= 0) {
+        const kickers = sortedCards.filter(card => card.value !== value);
+        return { value, cards: quads, kickers };
+    }
+
+    // Four of a kind was not found
+    return false;
 }
 
 /**
  * Returns an array of 5 cards that are a flush and suit.
  * If no flush is found, returns false.
+ * Does not check for higher ranking hands.
  * @pre cards is an array of < 10 cards
  * @param {Array[Card]} cards - An array of cards to check for a flush.
  * @returns {Object|false} - A sorted array of 5 cards (high -> low) that are a flush and suit, or false.
@@ -92,6 +100,7 @@ export const getFlush = cards => {
 /**
  * Returns an array of 5 cards that are a straight.
  * If no straight is found, returns false.
+ * Does not check for higher ranking hands.
  * @param {Array[Card]} cards - An array of cards to check for a straight.
  * @param {Boolean} [allowWheel=true] - Whether to allow the wheel to be a straight.
  * @returns {Array[Card]|false} - A sorted array of 5 cards (high -> low) that are a straight, or false.
@@ -132,7 +141,7 @@ export const getStraight = (cards, allowWheel = true) => {
  * Returns an object with an array of 3 cards that are three of a kind and sorted kicker cards.
  * If no three of a kind is found, returns false.
  * If there are multiple ranks of three of a kind, returns the highest ranked.
- * Does not check for a full house.
+ * Does not check for higher ranking hands made with kickers.
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Object|false} An object with an array of 3 cards that are three of a kind, sorted kicker cards, and value.
  */
@@ -141,15 +150,53 @@ export const getStraight = (cards, allowWheel = true) => {
     const groups = groupByRank(sortedCards);
     let value = -1;
     let trips = [];
-    let kickers = [];
     
+    // Find the highest three of a kind if exists
     for (const group of Object.values(groups)) {
         if (group.length === 3 && group[0].value > value) {
             value = group[0].value;
             trips = group;
-            kickers = sortedCards.filter(card => card.value !== value);
         }
     }
     
-    return (value >= 0) ? { value, cards: trips, kickers } : false;
+    // Three of a kind was found
+    if (value >= 0) {
+        const kickers = sortedCards.filter(card => card.value !== value);
+        return { value, cards: trips, kickers };
+    }
+
+    // Three of a kind was not found
+    return false;
+}
+
+/**
+ * Returns an object with an array of 2 cards that are a pair and sorted kicker cards.
+ * If no pair is found, returns false.
+ * If there are multiple pairs, returns the highest ranked pair.
+ * Does not check for higher ranking hands made with kickers.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Object|false} An object with an array of 2 cards that are a pair, sorted kicker cards, and value.
+ */
+ export const getPair = cards => {
+    const sortedCards = sortByRank(cards);
+    const groups = groupByRank(sortedCards);
+    let value = -1;
+    let pair = [];
+    
+    // Find the highest pair if exists
+    for (const group of Object.values(groups)) {
+        if (group.length === 2 && group[0].value > value) {
+            value = group[0].value;
+            pair = group;
+        }
+    }
+
+    // Pair was found
+    if (value >= 0) {
+        const kickers = sortedCards.filter(card => card.value !== value);
+        return { value, cards: pair, kickers };
+    }
+
+    // Pair was not found
+    return false;
 }

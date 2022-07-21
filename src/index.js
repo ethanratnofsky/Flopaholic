@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFourOfAKind, getThreeOfAKind, getFlush, getStraight } from './api/api';
+import { getFourOfAKind, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -99,7 +99,7 @@ const App = () => {
         forceUpdate();
         console.log(`Four of A Kind, ${fourOfAKind.cards[0].rank}s`);
         console.log(fourOfAKind);
-        console.log(`Redealt ${deals.length} times`);
+        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
         console.log(deals);
     }
 
@@ -117,7 +117,7 @@ const App = () => {
         forceUpdate();
         console.log(`${flush.cards[0].rank}-High Flush of ${flush.suit}`);
         console.log(flush);
-        console.log(`Redealt ${deals.length} times`);
+        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
         console.log(deals);
     }
 
@@ -135,7 +135,7 @@ const App = () => {
         forceUpdate();
         console.log(`${straight[0].rank}-High Straight`);
         console.log(straight);
-        console.log(`Redealt ${deals.length} times`);
+        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
         console.log(deals);
     }
 
@@ -153,7 +153,25 @@ const App = () => {
         forceUpdate();
         console.log(`Three of A Kind, ${threeOfAKind.cards[0].rank}s`);
         console.log(threeOfAKind);
-        console.log(`Redealt ${deals.length} times`);
+        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
+        console.log(deals);
+    }
+
+    // FOR DEBUGGING PAIR
+    const redealUntilPair = () => {
+        let pair;
+        let deals = [];
+
+        do {
+            newHand();
+            pair = getPair([...board, ...hole]);
+            deals.push({ board, hole });
+        } while (!pair);
+
+        forceUpdate();
+        console.log(`Pair of ${pair.cards[0].rank}s`);
+        console.log(pair);
+        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
         console.log(deals);
     }
 
@@ -172,6 +190,7 @@ const App = () => {
                     <button onClick={redealUntilFlush}>Flush</button>
                     <button onClick={redealUntilStraight}>Straight</button>
                     <button onClick={redealUntilThreeOfAKind}>Three of A Kind</button>
+                    <button onClick={redealUntilPair}>Pair</button>
                 </div>
             )}
             <div className='board-container'>
