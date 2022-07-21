@@ -38,10 +38,15 @@ const groupByRank = cards => {
 /**
  * Returns an object with an array of 4 cards that include four of a kind and sorted kicker cards.
  * If no four of a kind is found, returns false.
+ * @pre cards is an array of < 8 cards
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Object|false} An object with an array of 5 cards that include four of a kind and sorted kicker cards.
  */
 export const getFourOfAKind = cards => {
+    // Ensure input is an array of < 8 cards
+    if (cards.length >= 8)
+        throw new Error('getFourOfAKind: cards must be an array of < 8 cards');
+
     const sortedCards = sortByRank(cards);
     const groups = groupByRank(sortedCards);
     

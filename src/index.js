@@ -12,7 +12,7 @@ import './index.css';
 import Card from './components/Card';
 
 // Constants
-const DEBUG = false;
+const DEBUG = true;
 const BOARD_SIZE = 5;
 const HOLE_SIZE = 2;
 const ROUNDS = [
