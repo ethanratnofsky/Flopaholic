@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFlush, getStraight } from './api/api';
+import { getFourOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -85,6 +85,24 @@ const App = () => {
         }
     }
 
+    // FOR DEBUGGING FOUR OF A KIND
+    const redealUntilFourOfAKind = () => {
+        let fourOfAKind;
+        let deals = [];
+
+        do {
+            newHand();
+            fourOfAKind = getFourOfAKind([...board, ...hole]);
+            deals.push({ board, hole });
+        } while (!fourOfAKind);
+
+        forceUpdate();
+        console.log(`Four of A Kind, ${fourOfAKind.cards[0].rank}s`);
+        console.log(fourOfAKind);
+        console.log(`Redealt ${deals.length} times`);
+        console.log(deals);
+    }
+
     // FOR DEBUGGING FLUSH
     const redealUntilFlush = () => {
         let flush;
@@ -132,6 +150,7 @@ const App = () => {
             {DEBUG && (
                 <div className='debug-button-container'>
                     <label>Redeal Until...</label>
+                    <button onClick={redealUntilFourOfAKind}>Four of A Kind</button>
                     <button onClick={redealUntilFlush}>Flush</button>
                     <button onClick={redealUntilStraight}>Straight</button>
                 </div>

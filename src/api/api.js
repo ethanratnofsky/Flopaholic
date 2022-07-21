@@ -10,6 +10,54 @@ import { RANKS, SUITS } from './config.js';
 const sortByRank = cards => [...cards].sort((a, b) => b.value - a.value);
 
 /**
+ * Groups an array of cards by suit.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Object} A map of suit to array of cards.
+ */
+const groupBySuit = cards => {
+    let groups = {};
+    for (const suit of SUITS) {
+        groups[suit] = cards.filter(card => card.suit === suit);
+    }
+    return groups;
+}
+
+/**
+ * Groups an array of cards by rank.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Object} A map of rank to array of cards.
+ */
+const groupByRank = cards => {
+    let groups = {};
+    for (const rank of RANKS) {
+        groups[rank] = cards.filter(card => card.rank === rank);
+    }
+    return groups;
+}
+
+/**
+ * Returns an object with an array of 4 cards that include four of a kind and sorted kicker cards.
+ * If no four of a kind is found, returns false.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Object|false} An object with an array of 5 cards that include four of a kind and sorted kicker cards.
+ */
+export const getFourOfAKind = cards => {
+    const sortedCards = sortByRank(cards);
+    const groups = groupByRank(sortedCards);
+    
+    for (const [rank, group] of Object.entries(groups)) {
+        if (group.length === 4) {
+            return {
+                cards: group,
+                kickers: sortedCards.filter(card => card.rank !== rank),
+            };
+        }
+    }
+
+    return false;
+}
+
+/**
  * Returns an array of 5 cards that are a flush and suit.
  * If no flush is found, returns false.
  * @pre cards is an array of < 10 cards
@@ -22,13 +70,10 @@ export const getFlush = cards => {
         throw new Error('getFlush: cards must be an array of < 10 cards');
 
     // Group by suit
-    let groupBySuit = {};
-    for (const suit of SUITS) {
-        groupBySuit[suit] = cards.filter(card => card.suit === suit);
-    }
+    const suitGroups = groupBySuit(cards);
     
     // Check if number of cards in any suit is greater than or equal to 5
-    for (const [suit, cards] of Object.entries(groupBySuit)) {
+    for (const [suit, cards] of Object.entries(suitGroups)) {
         if (cards.length >= 5) {
             const sortedCards = sortByRank(cards);
             return {
