@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
+import { evaulateHand, getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -65,6 +65,7 @@ const App = () => {
     // State
     const [roundNum, setRoundNum] = useState(DEBUG ? 3 : 0);
     const [round, setRound] = useState(ROUNDS[roundNum]);
+    const [handRankName, setHandRankName] = useState('');
 
     // Custom forceUpdate function
     const [, forceUpdate] = useReducer(prev => !prev, false);
@@ -73,6 +74,7 @@ const App = () => {
     const handleReset = () => {
         newHand();
         setRoundNum(0);
+        setHandRankName('');
         forceUpdate(); // Component won't re-render without this if reset on initial round
     }
 
@@ -185,10 +187,18 @@ const App = () => {
         console.log(highCard);
     }
 
+    const handleEvaluateHand = () => {
+        const handRank = evaulateHand([...board, ...hole]);
+        setHandRankName(roundNum === 3 ? handRank.name : 'Nice Try ;)');
+    }
+
     // Update round state
     useEffect(() => {
         setRound(ROUNDS[roundNum]);
+        setHandRankName('');
     }, [roundNum]);
+
+    if (DEBUG) handleEvaluateHand();
 
     // Render
     return (
@@ -205,7 +215,7 @@ const App = () => {
                 </div>
             )}
             <div className='board-container'>
-                <h2>BOARD</h2>
+                <h2>BOARD {handRankName && `(${handRankName})`}</h2>
                 <div className='round-name'>{round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
@@ -228,6 +238,7 @@ const App = () => {
             <div className='button-container'>
                 <button className='btn' onClick={handleNextRound}>Next Round</button>
                 <button className='btn' onClick={handleReset}>Reset</button>
+                <button className='btn' onClick={handleEvaluateHand}>Evaluate Hand</button>
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>
