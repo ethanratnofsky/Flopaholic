@@ -18,7 +18,7 @@ h2 {
     font-size: 20px;
 }
 
-button {
+.btn {
     margin: 2px 5px;
     background-image: linear-gradient(to bottom, #FF7E31, #E62C03);
     box-shadow: #be2705 0 3px;
@@ -31,7 +31,7 @@ button {
     font-size: 20px;
 }
 
-button:hover {
+.btn:hover {
     background-image: linear-gradient(to bottom, #FF7E31, #d02702);
     text-decoration: none;
     cursor: pointer;
@@ -63,4 +63,15 @@ button:hover {
 
 .card-container {
     margin: 10px;
+}
+
+.debug-button-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 10px;
+}
+
+.debug-button-container button {
+    margin: 5px;
 }

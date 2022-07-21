@@ -6,6 +6,7 @@ export default class Card {
             throw new Error('Invalid card: ' + rank + ' of ' + suit);
 
         this.rank = rank;
+        this.value = RANKS.indexOf(rank);
         this.suit = suit;
     }
 

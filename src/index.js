@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFlush } from './api/api';
+import { getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -12,6 +12,7 @@ import './index.css';
 import Card from './components/Card';
 
 // Constants
+const DEBUG = false;
 const BOARD_SIZE = 5;
 const HOLE_SIZE = 2;
 const ROUNDS = [
@@ -62,7 +63,7 @@ newHand();
 // App component
 const App = () => {
     // State
-    const [roundNum, setRoundNum] = useState(0);
+    const [roundNum, setRoundNum] = useState(DEBUG ? 3 : 0);
     const [round, setRound] = useState(ROUNDS[roundNum]);
 
     // Custom forceUpdate function
@@ -84,17 +85,41 @@ const App = () => {
         }
     }
 
-    // FOR DEBUGGING
-    // const redealUntilFlush = () => {
-    //     let flush;
-    //     do {
-    //         newHand();
-    //         flush = getFlush([...board, ...hole]);
-    //     } while (!flush);
-    //     forceUpdate();
-    //     console.log(flush);
-    //     console.log(`${flush.cards[0].rank}-High Flush of ${flush.suit}`);
-    // }
+    // FOR DEBUGGING FLUSH
+    const redealUntilFlush = () => {
+        let flush;
+        let deals = [];
+
+        do {
+            newHand();
+            flush = getFlush([...board, ...hole]);
+            deals.push({ board, hole });
+        } while (!flush);
+
+        forceUpdate();
+        console.log(`${flush.cards[0].rank}-High Flush of ${flush.suit}`);
+        console.log(flush);
+        console.log(`Redealt ${deals.length} times`);
+        console.log(deals);
+    }
+
+    // FOR DEBUGGING STRAIGHT
+    const redealUntilStraight = () => {
+        let straight;
+        let deals = [];
+
+        do {
+            newHand();
+            straight = getStraight([...board, ...hole]);
+            deals.push({ board, hole });
+        } while (!straight);
+
+        forceUpdate();
+        console.log(`${straight[0].rank}-High Straight`);
+        console.log(straight);
+        console.log(`Redealt ${deals.length} times`);
+        console.log(deals);
+    }
 
     // Update round state
     useEffect(() => {
@@ -104,6 +129,13 @@ const App = () => {
     // Render
     return (
         <div className='container'>
+            {DEBUG && (
+                <div className='debug-button-container'>
+                    <label>Redeal Until...</label>
+                    <button onClick={redealUntilFlush}>Flush</button>
+                    <button onClick={redealUntilStraight}>Straight</button>
+                </div>
+            )}
             <div className='board-container'>
                 <h2>BOARD</h2>
                 <div className='round-name'>{round.name}</div>
@@ -126,12 +158,9 @@ const App = () => {
                 </ul>
             </div>
             <div className='button-container'>
-                <button onClick={handleNextRound} >Next Round</button>
-                <button onClick={handleReset} >Reset</button>
+                <button className='btn' onClick={handleNextRound}>Next Round</button>
+                <button className='btn' onClick={handleReset}>Reset</button>
             </div>
-            {/* <div className='button-container'>
-                <button onClick={redealUntilFlush} >Redeal Until Flush</button>
-            </div> */}
             <div className='hole-container'>
                 <h2>HOLE</h2>
                 <ul className='hole'>
