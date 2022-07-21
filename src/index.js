@@ -188,8 +188,7 @@ const App = () => {
     }
 
     const handleEvaluateHand = () => {
-        const handRank = evaulateHand([...board, ...hole]);
-        setHandRankName(roundNum === 3 ? handRank.name : 'Nice Try 😉');
+        setHandRankName(evaulateHand([...board, ...hole]).name);
     }
 
     // Update round state
@@ -238,7 +237,7 @@ const App = () => {
             <div className='button-container'>
                 <button className='btn' onClick={handleNextRound}>Next Round</button>
                 <button className='btn' onClick={handleReset}>Reset</button>
-                <button className='btn' onClick={handleEvaluateHand}>Evaluate Hand</button>
+                <button className='btn' onClick={handleEvaluateHand} disabled={roundNum !== 3}>Evaluate Hand</button>
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>

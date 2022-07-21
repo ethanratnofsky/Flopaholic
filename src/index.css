@@ -31,10 +31,15 @@ h2 {
     font-size: 20px;
 }
 
-.btn:hover {
+.btn:hover:not(:disabled) {
     background-image: linear-gradient(to bottom, #FF7E31, #d02702);
     text-decoration: none;
     cursor: pointer;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .container {
