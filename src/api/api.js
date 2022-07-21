@@ -200,3 +200,18 @@ export const getStraight = (cards, allowWheel = true) => {
     // Pair was not found
     return false;
 }
+
+/**
+ * Returns the highest ranking card.
+ * @param {Array[Card]} cards - An array of cards.
+ * @returns {Card} The highest ranking card.
+ */
+export const getHighCard = cards => {
+    let highest = cards[0];
+    for (const card of cards) {
+        if (card.value > highest.value) {
+            highest = card;
+        }
+    }
+    return highest;
+}

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { getFourOfAKind, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
+import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -175,6 +175,16 @@ const App = () => {
         console.log(deals);
     }
 
+    // FOR DEBUGGING HIGH CARD
+    const redealUntilHighCard = () => {
+        newHand();
+        const highCard = getHighCard([...board, ...hole]);
+
+        forceUpdate();
+        console.log(`${highCard.rank} High`);
+        console.log(highCard);
+    }
+
     // Update round state
     useEffect(() => {
         setRound(ROUNDS[roundNum]);
@@ -191,6 +201,7 @@ const App = () => {
                     <button onClick={redealUntilStraight}>Straight</button>
                     <button onClick={redealUntilThreeOfAKind}>Three of A Kind</button>
                     <button onClick={redealUntilPair}>Pair</button>
+                    <button onClick={redealUntilHighCard}>High Card</button>
                 </div>
             )}
             <div className='board-container'>
