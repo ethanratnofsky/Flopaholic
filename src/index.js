@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
+import { getFlush } from './api/api';
 
 // Styles
 import './index.css';
@@ -13,12 +14,24 @@ import Card from './components/Card';
 // Constants
 const BOARD_SIZE = 5;
 const HOLE_SIZE = 2;
-const ROUNDS = {
-    'Pre-Flop': 0,
-    'Flop': 3,
-    'Turn': 4,
-    'River': 5
-}
+const ROUNDS = [
+    {
+        name: 'Pre-Flop',
+        numCardsShown: 0
+    },
+    {
+        name: 'Flop',
+        numCardsShown: 3
+    },
+    {
+        name: 'Turn',
+        numCardsShown: 4
+    },
+    {
+        name: 'River',
+        numCardsShown: 5
+    }
+];
 
 // Set up board and hole
 const deck = new Deck();
@@ -49,46 +62,56 @@ newHand();
 // App component
 const App = () => {
     // State
-    const [round, setRound] = useState(0);
-    const [roundName, setRoundName] = useState('');
-    const [numShown, setNumShown] = useState(0);
+    const [roundNum, setRoundNum] = useState(0);
+    const [round, setRound] = useState(ROUNDS[roundNum]);
 
     // Custom forceUpdate function
     const [, forceUpdate] = useReducer(prev => !prev, false);
 
-    // Update state values
-    useEffect(() => {
-        setRoundName(Object.keys(ROUNDS)[round]);
-        setNumShown(ROUNDS[roundName]);
-    }, [round, roundName]);
-
     // Reset board and hole
     const handleReset = () => {
         newHand();
-        setRound(0);
+        setRoundNum(0);
         forceUpdate(); // Component won't re-render without this if reset on initial round
     }
 
     // Update round
     const handleNextRound = () => {
-        if (round === Object.keys(ROUNDS).length - 1) {
+        if (roundNum === ROUNDS.length - 1) {
             handleReset();
         } else {
-            setRound(prev => prev + 1);
+            setRoundNum(prev => prev + 1);
         }
     }
 
+    // FOR DEBUGGING
+    // const redealUntilFlush = () => {
+    //     let flush;
+    //     do {
+    //         newHand();
+    //         flush = getFlush([...board, ...hole]);
+    //     } while (!flush);
+    //     forceUpdate();
+    //     console.log(flush);
+    //     console.log(`${flush.cards[0].rank}-High Flush of ${flush.suit}`);
+    // }
+
+    // Update round state
+    useEffect(() => {
+        setRound(ROUNDS[roundNum]);
+    }, [roundNum]);
+
     // Render
     return (
-        <div className='container' >
-            <div className='board-container' >
+        <div className='container'>
+            <div className='board-container'>
                 <h2>BOARD</h2>
-                <p>{roundName}</p>
+                <div className='round-name'>{round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
                         let { rank, suit } = card;
 
-                        if (index >= numShown) {
+                        if (index >= round.numCardsShown) {
                             rank = suit = null;
                         }
 
@@ -106,7 +129,10 @@ const App = () => {
                 <button onClick={handleNextRound} >Next Round</button>
                 <button onClick={handleReset} >Reset</button>
             </div>
-            <div className='hole-container' >
+            {/* <div className='button-container'>
+                <button onClick={redealUntilFlush} >Redeal Until Flush</button>
+            </div> */}
+            <div className='hole-container'>
                 <h2>HOLE</h2>
                 <ul className='hole'>
                     {hole.map((card, index) => (
