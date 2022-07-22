@@ -8,14 +8,14 @@ const Card = ({ rank, suit }) => {
 
     if (rank && suit) {
         try {
-            srcImg = require(`../images/cards/${rank.toLowerCase()}_of_${suit.toLowerCase()}.svg`).default;
+            srcImg = require(`../../assets/cards/${rank.toLowerCase()}_of_${suit.toLowerCase()}.svg`).default;
             altText = `${rank} of ${suit}`;
             isShown = true;
         } catch (e) {
             throw new Error(`Invalid card: ${rank} of ${suit}`);
         }
     } else {
-        srcImg = require('../images/cards/card_back.svg').default;
+        srcImg = require('../../assets/cards/card_back.svg').default;
         altText = 'Card Back';
     }
 
