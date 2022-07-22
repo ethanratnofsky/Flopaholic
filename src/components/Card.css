@@ -4,3 +4,21 @@
     border-radius: 8px;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
 }
+
+.card:not(.shown) {
+    animation: hideRight 0.15s;
+}
+
+.card.shown {
+    animation: showRight 0.15s;
+}
+
+@keyframes showRight {
+    from { transform: rotateY(-90deg); }
+    to { transform: rotateY(0); }
+}
+
+@keyframes hideRight {
+    from { transform: rotateY(90deg); }
+    to { transform: rotateY(0); }
+}

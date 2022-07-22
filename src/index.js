@@ -71,7 +71,7 @@ const App = () => {
                 </div>
             )}
             <div className='board-container'>
-                <h2>BOARD {handRankingName && `(${handRankingName})`}</h2>
+                <h2>BOARD{handRankingName && ` (${handRankingName})`}</h2>
                 <div className='round-name'>{round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
