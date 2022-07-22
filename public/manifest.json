@@ -1,6 +1,7 @@
 {
     "name": "Flopaholic",
     "short_name": "Flopaholic",
+    "homepage": "https://ethanratnofsky.github.io/Flopaholic/",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
