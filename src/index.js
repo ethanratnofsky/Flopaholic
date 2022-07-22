@@ -2,9 +2,9 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // API
-import Deck from './api/Deck';
-import Hand from './api/Hand';
-import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
+import Deck from './models/Deck';
+import Hand from './models/Hand';
+import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './models/utils';
 
 // Styles
 import './index.css';
@@ -13,27 +13,7 @@ import './index.css';
 import Card from './components/Card';
 
 // Constants
-const DEBUG = false;
-const BOARD_SIZE = 5;
-const HOLE_SIZE = 2;
-const ROUNDS = [
-    {
-        name: 'Pre-Flop',
-        numCardsShown: 0
-    },
-    {
-        name: 'Flop',
-        numCardsShown: 3
-    },
-    {
-        name: 'Turn',
-        numCardsShown: 4
-    },
-    {
-        name: 'River',
-        numCardsShown: 5
-    }
-];
+import { DEBUG, BOARD_SIZE, HOLE_SIZE, ROUNDS } from './constants';
 
 // Set up board and hole
 const deck = new Deck();

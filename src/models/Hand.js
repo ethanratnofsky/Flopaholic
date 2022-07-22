@@ -1,9 +1,9 @@
-import { RANKS, HAND_RANKINGS } from './config.js';
+import { RANKS, HAND_RANKINGS } from '../constants';
 
-import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight, sortByRank } from './api';
+import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight, sortByRank } from './utils';
 
 export default class Hand {
-    // Private fields
+    // Private field declarations
     #cards;
     #activeCards;
     #shortName;

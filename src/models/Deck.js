@@ -1,5 +1,5 @@
-import { RANKS, SUITS } from './config.js';
-import Card from './Card.js';
+import { RANKS, SUITS } from '../constants';
+import Card from './Card';
 
 export default class Deck {
     constructor() {

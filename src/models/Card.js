@@ -1,4 +1,4 @@
-import { RANKS, SUITS } from './config.js';
+import { RANKS, SUITS } from '../constants';
 
 export default class Card {
     constructor(rank, suit) {
