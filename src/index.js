@@ -2,9 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // API
-import Deck from './models/Deck';
-import Hand from './models/Hand';
-import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './models/utils';
+import { board, hand, hole, newHand, redealUntil } from './utils';
 
 // Styles
 import './index.css';
@@ -13,32 +11,9 @@ import './index.css';
 import Card from './components/Card';
 
 // Constants
-import { DEBUG, BOARD_SIZE, HOLE_SIZE, ROUNDS } from './constants';
+import { DEBUG, HAND_RANKINGS, ROUNDS } from './constants';
 
-// Set up board and hole
-const deck = new Deck();
-
-let board = [];
-let hole = [];
-
-const newHand = () => {
-    // Reset deck
-    deck.reset();
-    deck.shuffle();
-
-    // Reset board
-    board = [];
-    for (let i = 0; i < BOARD_SIZE; i++) {
-        board.push(deck.draw());
-    }
-
-    // Reset hole
-    hole = [];
-    for (let i = 0; i < HOLE_SIZE; i++) {
-        hole.push(deck.draw());
-    }
-}
-
+// Set up new hand
 newHand();
 
 // App component
@@ -46,7 +21,7 @@ const App = () => {
     // State
     const [roundNum, setRoundNum] = useState(DEBUG ? 3 : 0);
     const [round, setRound] = useState(ROUNDS[roundNum]);
-    const [handRankName, setHandRankName] = useState('');
+    const [handRankingName, setHandRankingName] = useState('');
 
     // Custom forceUpdate function
     const [, forceUpdate] = useReducer(prev => !prev, false);
@@ -55,7 +30,6 @@ const App = () => {
     const handleReset = () => {
         newHand();
         setRoundNum(0);
-        setHandRankName('');
         forceUpdate(); // Component won't re-render without this if reset on initial round
     }
 
@@ -68,116 +42,31 @@ const App = () => {
         }
     }
 
-    // FOR DEBUGGING FOUR OF A KIND
-    const redealUntilFourOfAKind = () => {
-        let fourOfAKind;
-        let deals = [];
-
-        do {
-            newHand();
-            fourOfAKind = getFourOfAKind([...board, ...hole]);
-            deals.push({ board, hole });
-        } while (!fourOfAKind);
-
-        forceUpdate();
-        console.log(`Four of A Kind, ${fourOfAKind.cards[0].rank}s`);
-        console.log(fourOfAKind);
-        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-        console.log(deals);
-    }
-
-    // FOR DEBUGGING FLUSH
-    const redealUntilFlush = () => {
-        let flush;
-        let deals = [];
-
-        do {
-            newHand();
-            flush = getFlush([...board, ...hole]);
-            deals.push({ board, hole });
-        } while (!flush);
-
-        forceUpdate();
-        console.log(`${flush.cards[0].rank}-High Flush of ${flush.suit}`);
-        console.log(flush);
-        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-        console.log(deals);
-    }
-
-    // FOR DEBUGGING STRAIGHT
-    const redealUntilStraight = () => {
-        let straight;
-        let deals = [];
-
-        do {
-            newHand();
-            straight = getStraight([...board, ...hole]);
-            deals.push({ board, hole });
-        } while (!straight);
-
-        forceUpdate();
-        console.log(`${straight[0].rank}-High Straight`);
-        console.log(straight);
-        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-        console.log(deals);
-    }
-
-    // FOR DEBUGGING THREE OF A KIND
-    const redealUntilThreeOfAKind = () => {
-        let threeOfAKind;
-        let deals = [];
-
-        do {
-            newHand();
-            threeOfAKind = getThreeOfAKind([...board, ...hole]);
-            deals.push({ board, hole });
-        } while (!threeOfAKind);
-
-        forceUpdate();
-        console.log(`Three of A Kind, ${threeOfAKind.cards[0].rank}s`);
-        console.log(threeOfAKind);
-        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-        console.log(deals);
-    }
-
-    // FOR DEBUGGING PAIR
-    const redealUntilPair = () => {
-        let pair;
-        let deals = [];
-
-        do {
-            newHand();
-            pair = getPair([...board, ...hole]);
-            deals.push({ board, hole });
-        } while (!pair);
-
-        forceUpdate();
-        console.log(`Pair of ${pair.cards[0].rank}s`);
-        console.log(pair);
-        console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-        console.log(deals);
-    }
-
-    // FOR DEBUGGING HIGH CARD
-    const redealUntilHighCard = () => {
-        newHand();
-        const highCard = getHighCard([...board, ...hole]);
-
-        forceUpdate();
-        console.log(`${highCard.rank} High`);
-        console.log(highCard);
-    }
-
+    // Get hand rank name
     const handleEvaluateHand = () => {
-        const hand = new Hand([...board, ...hole]);
-        setHandRankName(hand.getLongName());
+        setHandRankingName(hand.getLongName());
+        forceUpdate(); // Component won't re-render without this if reset on initial round
     }
 
-    // Update round state
+    // Update state upon round change
     useEffect(() => {
-        setRound(ROUNDS[roundNum]);
-        setHandRankName('');
-        if (DEBUG) handleEvaluateHand();
+        setRound(ROUNDS[roundNum]); // set round
+        setHandRankingName(''); // reset hand ranking name
+
+        // Update hand
+        switch (roundNum) {
+            case 1: // Flop
+                hand.addCards(board.slice(0, 3));
+                break;
+            case 2: // Turn
+                hand.addCards([board[3]]);
+                break;
+            case 3: // River
+                hand.addCards([board[4]]);
+                break;
+        }
+
+        if (DEBUG) handleEvaluateHand(); // always show hand ranking if in debug mode
     }, [roundNum]);
 
     // Render
@@ -186,16 +75,13 @@ const App = () => {
             {DEBUG && (
                 <div className='debug-button-container'>
                     <label>Redeal Until...</label>
-                    <button onClick={redealUntilFourOfAKind}>Four of A Kind</button>
-                    <button onClick={redealUntilFlush}>Flush</button>
-                    <button onClick={redealUntilStraight}>Straight</button>
-                    <button onClick={redealUntilThreeOfAKind}>Three of A Kind</button>
-                    <button onClick={redealUntilPair}>Pair</button>
-                    <button onClick={redealUntilHighCard}>High Card</button>
+                    {Object.values(HAND_RANKINGS).map((ranking, index) => (
+                        <button key={index} onClick={() => {redealUntil(ranking); handleEvaluateHand();}}>{ranking}</button>
+                    ))}
                 </div>
             )}
             <div className='board-container'>
-                <h2>BOARD {handRankName && `(${handRankName})`}</h2>
+                <h2>BOARD {handRankingName && `(${handRankingName})`}</h2>
                 <div className='round-name'>{round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
@@ -218,7 +104,7 @@ const App = () => {
             <div className='button-container'>
                 <button className='btn' onClick={handleNextRound}>Next Round</button>
                 <button className='btn' onClick={handleReset}>Reset</button>
-                <button className='btn' onClick={handleEvaluateHand} disabled={roundNum !== 3}>Evaluate Hand</button>
+                <button className='btn' onClick={handleEvaluateHand}>Evaluate Hand</button>
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>

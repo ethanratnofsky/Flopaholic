@@ -22,14 +22,20 @@ export default class Hand {
     }
 
 
-    // get method for cards
-    get cards() {
+    // Returns the sorted array of cards considered
+    getCards() {
         return this.#cards;
     }
 
-    // set method for cards
-    set cards(cards) {
+    // Sets the cards of the hand and re-evaluates the ranking
+    setCards(cards) {
         this.#cards = sortByRank(cards);
+        this.#evaluate();
+    }
+
+    // Adds cards to the hand and re-evaluates the ranking
+    addCards(cards) {
+        this.#cards = sortByRank([...this.#cards, ...cards]);
         this.#evaluate();
     }
 
@@ -51,12 +57,6 @@ export default class Hand {
     // Returns array of kickers of hand ranking in order of highest to lowest
     getKickers() {
         return this.#kickers;
-    }
-
-    // Adds cards to the hand and re-evaluates the ranking
-    addCards(cards) {
-        this.#cards = sortByRank([...this.#cards, ...cards]);
-        this.#evaluate();
     }
     
     // Evaluates the hand ranking and sets the short name, long name, active cards, and kickers
@@ -95,7 +95,7 @@ export default class Hand {
         const threeOfAKind = getThreeOfAKind(this.#cards);
         const pair = getPair(this.#cards);
         if (threeOfAKind && pair) {
-            // Full House
+            // Full House TODO: doesn't handle case of two sets of three of a kind
             this.#shortName = HAND_RANKINGS.FULL_HOUSE;
             this.#longName = `${HAND_RANKINGS.FULL_HOUSE} of ${threeOfAKind.cards[0].rank}s over ${pair.cards[0].rank}s`
             this.#activeCards = [...threeOfAKind.cards, ...pair.cards];
@@ -153,7 +153,7 @@ export default class Hand {
         this.#shortName = HAND_RANKINGS.HIGH_CARD;
         this.#longName = `${highCard.rank} High`;
         this.#activeCards = [highCard];
-        this.#kickers = sortedCards.filter(card => card.value !== highCard.value).slice(0, 4);
+        this.#kickers = this.#cards.filter(card => card.value !== highCard.value).slice(0, 4);
         return;
     }
 }
