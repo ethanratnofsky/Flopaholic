@@ -1,5 +1,5 @@
-import Card from './Card.js';
 import { RANKS, SUITS } from './config.js';
+import Card from './Card.js';
 
 /**
  * Returns a copy of an array of cards that are sorted by rank.
@@ -7,14 +7,14 @@ import { RANKS, SUITS } from './config.js';
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Array[Card]} A copy of the array of cards sorted by rank.
  */
-const sortByRank = cards => [...cards].sort((a, b) => b.value - a.value);
+export const sortByRank = cards => [...cards].sort((a, b) => b.value - a.value);
 
 /**
  * Groups an array of cards by suit.
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Object} A map of suit to array of cards.
  */
-const groupBySuit = cards => {
+export const groupBySuit = cards => {
     let groups = {};
     for (const suit of SUITS) {
         groups[suit] = cards.filter(card => card.suit === suit);
@@ -27,7 +27,7 @@ const groupBySuit = cards => {
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Object} A map of rank to array of cards.
  */
-const groupByRank = cards => {
+export const groupByRank = cards => {
     let groups = {};
     for (const rank of RANKS) {
         groups[rank] = cards.filter(card => card.rank === rank);
@@ -214,104 +214,4 @@ export const getHighCard = cards => {
         }
     }
     return highest;
-}
-
-/**
- * Evaluate a hand of cards
- * @param {Array[Card]} cards - An array of cards.
- * @returns {Object} 
- */
-export const evaulateHand = cards => {
-    // Check for flush
-    const flush = getFlush(cards);
-    if (flush) {
-        const straightFlush = getStraight(flush.cards);
-        if (straightFlush) {
-            // Royal?/Straight Flush
-            const isRoyal = straightFlush[0].value === RANKS.length - 1;
-            return {
-                name: `${isRoyal ? 'Royal' : straightFlush[0].rank + '-High Straight'} Flush of ${flush.suit}`,
-                cards: straightFlush,
-            };
-        }
-    }
-
-    // Check for four of a kind
-    const fourOfAKind = getFourOfAKind(cards);
-    if (fourOfAKind) {
-        // Four of a Kind
-        return {
-            name: `Four of a Kind, ${fourOfAKind.cards[0].rank}s`,
-            cards: fourOfAKind.cards,
-            kicker: fourOfAKind.kickers[0],
-        };
-    }
-
-    // Check for three of a kind and pair
-    const threeOfAKind = getThreeOfAKind(cards);
-    const pair = getPair(cards);
-    if (threeOfAKind && pair) {
-        // Full House
-        return {
-            name: `Full House of ${threeOfAKind.cards[0].rank}s over ${pair.cards[0].rank}s`,
-            three: threeOfAKind.cards,
-            two: pair.cards,
-        };
-    }
-
-    if (flush) {
-        // Flush
-        return {
-            name: `${flush.cards[0].rank}-High Flush of ${flush.suit}`,
-            cards: flush.cards,
-        };
-    }
-
-    // Check for straight
-    const straight = getStraight(cards);
-    if (straight) {
-        // Straight
-        return {
-            name: `${straight[0].rank + '-High Straight'}`,
-            cards: straight,
-        };
-    }
-
-    if (threeOfAKind) {
-        // Three of a Kind
-        return {
-            name: `Three of a Kind, ${threeOfAKind.cards[0].rank}s`,
-            cards: threeOfAKind.cards,
-            kickers: threeOfAKind.kickers.slice(0, 2),
-        };
-    }
-
-    if (pair) {
-        const additionalPair = getPair(pair.kickers);
-        if (additionalPair) {
-            // Two Pair
-            return {
-                name: `Two Pair, ${pair.cards[0].rank}s and ${additionalPair.cards[0].rank}s`,
-                pairOne: pair.cards,
-                pairTwo: additionalPair.cards,
-                kicker: additionalPair.kickers[0],
-            };
-        } else {
-            // Pair
-            return {
-                name: `Pair of ${pair.cards[0].rank}s`,
-                cards: pair.cards,
-                kickers: pair.kickers.slice(0, 3),
-            };
-        }
-    }
-
-    // High Card
-    const highCard = getHighCard(cards);
-    const sortedCards = sortByRank(cards);
-    return {
-        name: `${highCard.rank} High`,
-        card: highCard,
-        kickers: sortedCards.filter(card => card.value !== highCard.value).slice(0, 4),
-    }
 }

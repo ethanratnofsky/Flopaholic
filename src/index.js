@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client';
 
 // API
 import Deck from './api/Deck';
-import { evaulateHand, getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
+import Hand from './api/Hand';
+import { getFourOfAKind, getHighCard, getPair, getThreeOfAKind, getFlush, getStraight } from './api/api';
 
 // Styles
 import './index.css';
@@ -188,7 +189,8 @@ const App = () => {
     }
 
     const handleEvaluateHand = () => {
-        setHandRankName(evaulateHand([...board, ...hole]).name);
+        const hand = new Hand([...board, ...hole]);
+        setHandRankName(hand.getLongName());
     }
 
     // Update round state
