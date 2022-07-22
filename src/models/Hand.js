@@ -85,15 +85,20 @@ export default class Hand {
             return;
         }
     
-        // Check for three of a kind and pair
+        // Check for three of a kind and paired kicker
         const threeOfAKind = getThreeOfAKind(this.#cards);
-        const pair = getPair(this.#cards);
-        if (threeOfAKind && pair) {
-            // Full House TODO: doesn't handle case of two sets of three of a kind
-            this.#shortName = HAND_RANKINGS.FULL_HOUSE;
-            this.#longName = `${HAND_RANKINGS.FULL_HOUSE} of ${threeOfAKind.cards[0].rank}s over ${pair.cards[0].rank}s`
-            this.#activeCards = [...threeOfAKind.cards, ...pair.cards];
-            return;
+        if (threeOfAKind) {
+            // Check for highest paired kicker
+            const kickers = threeOfAKind.kickers;
+            for (let i = 0; i < kickers.length - 1; i++) {
+                if (kickers[i].value === kickers[i + 1].value) {
+                    // Full House
+                    this.#shortName = HAND_RANKINGS.FULL_HOUSE;
+                    this.#longName = `${HAND_RANKINGS.FULL_HOUSE} of ${threeOfAKind.cards[0].rank}s over ${kickers[i].rank}s`
+                    this.#activeCards = [...threeOfAKind.cards, kickers[i], kickers[i + 1]];
+                    return;
+                }
+            }
         }
     
         if (flush) {
@@ -123,6 +128,7 @@ export default class Hand {
             return;
         }
     
+        const pair = getPair(this.#cards);
         if (pair) {
             const secondPair = getPair(pair.kickers);
             if (secondPair) {
