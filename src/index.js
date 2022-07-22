@@ -39,7 +39,7 @@ const App = () => {
     const handleReset = () => {
         newHand();
         setRoundNum(0);
-        if (DEBUG) updateHandRankingName(); // If in debug mode and already on pre-flop, need to force update hand ranking
+        setHandRankingName(DEBUG ? hand.getLongName() : '');
         forceUpdate(); // If round doesn't change and hand ranking doesn't change but cards are different, app won't re-render new cards without this
     }
 
