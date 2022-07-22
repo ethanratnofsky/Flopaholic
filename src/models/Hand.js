@@ -33,12 +33,6 @@ export default class Hand {
         this.#evaluate();
     }
 
-    // Adds cards to the hand and re-evaluates the ranking
-    addCards(cards) {
-        this.#cards = sortByRank([...this.#cards, ...cards]);
-        this.#evaluate();
-    }
-
     // Returns array of cards that classify ranking
     getActiveCards() {
         return this.#activeCards;

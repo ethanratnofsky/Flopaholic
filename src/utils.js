@@ -36,15 +36,14 @@ export const redealUntil = (ranking) => {
     if (HAND_RANKINGS.ranking)
         throw new Error(`Invalid hand ranking: ${ranking}`);
 
-    const deals = [];
+    let numRedeals = 0;
 
     do {
         newHand();
-        hand.addCards(board);
-        deals.push(hand.getCards());
+        hand.setCards([...hole, ...board]);
+        numRedeals++;
     } while (hand.getShortName() !== ranking);
 
     console.log(hand.getLongName());
-    console.log(`Redealt ${deals.length} time${deals.length === 1 ? '' : 's'}`);
-    console.log(deals);
+    console.log(`Redealt ${numRedeals} time${numRedeals === 1 ? '' : 's'}`);
 }

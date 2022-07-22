@@ -13,7 +13,7 @@ export const HAND_RANKINGS = {
     ROYAL_FLUSH: 'Royal Flush',
 };
 
-export const DEBUG = false;
+export const DEBUG = true;
 export const BOARD_SIZE = 5;
 export const HOLE_SIZE = 2;
 export const ROUNDS = [
