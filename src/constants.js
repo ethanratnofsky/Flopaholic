@@ -12,8 +12,6 @@ export const HAND_RANKINGS = {
     STRAIGHT_FLUSH: 'Straight Flush',
     ROYAL_FLUSH: 'Royal Flush',
 };
-
-export const DEBUG = false;
 export const BOARD_SIZE = 5;
 export const HOLE_SIZE = 2;
 export const ROUNDS = [

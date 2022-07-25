@@ -10,7 +10,7 @@ import './App.css';
 import Card from './Card';
 
 // Constants
-import { DEBUG, HAND_RANKINGS, ROUNDS } from '../constants';
+import { BOARD_SIZE, HAND_RANKINGS, ROUNDS } from '../constants';
 
 // Set up initial hand
 newHand();
@@ -18,11 +18,15 @@ newHand();
 // App component
 const App = () => {
     // State
-    const [roundNum, setRoundNum] = useState(DEBUG ? 3 : 0);
+    const [roundNum, setRoundNum] = useState(0);
     const [round, setRound] = useState(ROUNDS[roundNum]);
-    const [handRankingName, setHandRankingName] = useState('');
+    const [showRanking, setShowRanking] = useState(false);
 
-    // Function used to force a re-render
+    const [showOptions, setShowOptions] = useState(false);
+    const [showBoard, setShowBoard] = useState(false);
+    const [autoEvaluate, setAutoEvaluate] = useState(false);
+
+    // Function used to force a re-render (use every time hand changes)
     const [, forceUpdate] = useReducer(prev => !prev, false);
 
     // Update round
@@ -34,49 +38,76 @@ const App = () => {
         }
     }
 
-    // Reset hand and state, then re-render
-    const handleReset = () => {
-        newHand();
-        setRoundNum(0);
-        setHandRankingName(DEBUG ? hand.getLongName() : '');
-        forceUpdate(); // If round doesn't change and hand ranking doesn't change but cards are different, app won't re-render new cards without this
-    }
-
-    // Update hand ranking name
-    const updateHandRankingName = () => {
-        setHandRankingName(hand.getLongName());
-    }
-
     // If round number changes, update round
     useEffect(() => {
         setRound(ROUNDS[roundNum]);
     }, [roundNum]);
 
-    // If round changes, update hand and hand ranking name
+    // Reset hand and state, then re-render
+    const handleReset = () => {
+        newHand();
+        if (showBoard) hand.setCards([...hole, ...board]);
+        forceUpdate();
+        setRoundNum(0);
+        setShowRanking(false || autoEvaluate);
+    }
+
+    // Show hand ranking name
+    const handleShowRanking = () => {
+        setShowRanking(true);
+    }
+
+    // If round changes, update hand
     useEffect(() => {
         hand.setCards([...hole, ...board.slice(0, round.numCardsShown)]);
-        setHandRankingName(DEBUG ? hand.getLongName() : '');
+        forceUpdate();
+        setShowRanking(false || autoEvaluate);
     }, [round])
+
+    // If show board option is toggled, update hand
+    useEffect(() => {
+        hand.setCards([...hole, ...board.slice(0, showBoard ?  BOARD_SIZE : round.numCardsShown)]);
+        forceUpdate();
+        setShowRanking(false || autoEvaluate);
+    }, [showBoard])
+
+    // If auto evaluate option is toggled, update show ranking state
+    useEffect(() => {
+        setShowRanking(autoEvaluate);
+    }, [autoEvaluate])
 
     // Render
     return (
         <div className='container'>
-            {DEBUG && (
-                <div className='debug-button-container'>
-                    <label>Redeal Until...</label>
+            <div className='options-container'>
+                <div className='gear-container'>
+                    <span className='gear' onClick={() => setShowOptions(prev => !prev)}>⚙</span>
+                </div>
+                <div className={`options-panel${showOptions ? '' : ' hidden'}`}>
+                    <h3 className='options-title'>Options</h3>
+                    <label>
+                        <input type='checkbox' checked={showBoard} onChange={() => setShowBoard(prev => !prev)} />
+                        Show Board
+                    </label>
+                    <label>
+                        <input type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
+                        Auto-Evaluate
+                    </label>
+                    <h4>Redeal Until...</h4>
                     {Object.values(HAND_RANKINGS).map((ranking, index) => (
-                        <button key={index} onClick={() => {redealUntil(ranking); setRoundNum(3); updateHandRankingName(); forceUpdate();}}>{ranking}</button>
+                        <button key={index} onClick={() => {redealUntil(ranking); setShowBoard(true); setAutoEvaluate(true); forceUpdate();}}>{ranking}</button>
                     ))}
                 </div>
-            )}
+            </div>
             <div className='board-container'>
-                <h2>BOARD{handRankingName && ` (${handRankingName})`}</h2>
-                <div className='round-name'>{round.name}</div>
+                <h2>BOARD{showRanking && ` (${hand.getLongName()})`}</h2>
+                <div className='round-name'>{showBoard ? '---' : round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
                         let { rank, suit } = card;
 
-                        if (index >= round.numCardsShown) {
+                        // If card is hidden, don't pass rank and suit
+                        if (!showBoard && index >= round.numCardsShown) {
                             rank = suit = null;
                         }
 
@@ -91,9 +122,9 @@ const App = () => {
                 </ul>
             </div>
             <div className='button-container'>
-                <button className='btn' onClick={handleNextRound}>Next Round</button>
-                <button className='btn' onClick={handleReset}>Reset</button>
-                <button className='btn' onClick={updateHandRankingName}>Evaluate Hand</button>
+                <button className='btn' onClick={handleNextRound} disabled={showBoard}>Next Round</button>
+                <button className='btn' onClick={handleReset}>New Deal</button>
+                <button className='btn' onClick={handleShowRanking} disabled={autoEvaluate}>Show Hand Ranking</button>
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>
