@@ -16,8 +16,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "public/index.html"
+      template: "public/index.html",
+      favicon: "public/favicon.ico",
     }),
-],
+  ],
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 };
