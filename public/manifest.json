@@ -20,7 +20,7 @@
         },
         {
             "src": "apple-touch-icon.png",
-            "sizes": "192x192",
+            "sizes": "180x180",
             "type": "image/png"
         },
         {
@@ -36,7 +36,7 @@
         {
             "src": "favicon.ico",
             "sizes": "64x64",
-            "type": "image/png"
+            "type": "image/x-icon"
         }
     ],
     "theme_color": "#ffffff",
