@@ -12,3 +12,23 @@ h2 {
     margin-block: 0.75rem;
     font-size: 40px;
 }
+
+.slide-left {
+    animation: slide-left 0.5s forwards;
+}
+
+.slide-right {
+    opacity: 1 !important;
+    transition: opacity 0.01s !important;
+    animation: slide-right 0.5s forwards;
+}
+    
+@keyframes slide-left {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0); }
+}
+    
+@keyframes slide-right {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}

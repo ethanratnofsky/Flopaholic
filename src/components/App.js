@@ -1,13 +1,14 @@
 import React, { useEffect, useReducer, useState } from 'react';
 
 // API
-import { board, hand, hole, newHand, redealUntil } from '../utils';
+import { board, calculateHandProbability, deck, hand, hole, newHand, redealUntil } from '../utils';
 
 // Styles
 import './App.css';
 
 // Components
 import Card from './Card';
+import ProbabilitiesPanel from './ProbabilitiesPanel';
 
 // Constants
 import { BOARD_SIZE, HAND_RANKINGS, ROUNDS } from '../constants';
@@ -23,8 +24,9 @@ const App = () => {
     const [showRanking, setShowRanking] = useState(false);
 
     const [showOptions, setShowOptions] = useState(false);
-    const [showBoard, setShowBoard] = useState(false);
     const [autoEvaluate, setAutoEvaluate] = useState(false);
+    const [showBoard, setShowBoard] = useState(false);
+    const [showProbabilities, setShowProbabilities] = useState(false);
 
     // Function used to force a re-render (use every time hand changes)
     const [, forceUpdate] = useReducer(prev => !prev, false);
@@ -80,25 +82,30 @@ const App = () => {
     return (
         <div className='container'>
             <div className='options-container'>
-                <div className='gear-container'>
-                    <span className='gear' onClick={() => setShowOptions(prev => !prev)}>⚙</span>
-                </div>
-                <div className={`options-panel${showOptions ? '' : ' hidden'}`}>
+                <div className={`options-panel${showOptions ? ' slide-right' : ' slide-left'}`}>
                     <h3 className='options-title'>Options</h3>
+                    <label>
+                        <input type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
+                        Auto-Evaluate
+                    </label>
                     <label>
                         <input type='checkbox' checked={showBoard} onChange={() => setShowBoard(prev => !prev)} />
                         Show Board
                     </label>
                     <label>
-                        <input type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
-                        Auto-Evaluate
+                        <input type='checkbox' checked={showProbabilities} onChange={() => setShowProbabilities(prev => !prev)} />
+                        Show Probabilities
                     </label>
                     <h4>Redeal Until...</h4>
                     {Object.values(HAND_RANKINGS).map((ranking, index) => (
                         <button key={index} onClick={() => {redealUntil(ranking); setShowBoard(true); setAutoEvaluate(true); forceUpdate();}}>{ranking}</button>
                     ))}
                 </div>
+                <div className='gear-container'>
+                    <span className='gear' onClick={() => setShowOptions(prev => !prev)}>⚙</span>
+                </div>
             </div>
+            <ProbabilitiesPanel probabilities={calculateHandProbability(hand, [...deck.cards, ...board.slice(round.numCardsShown)])} hidden={!showProbabilities} />
             <div className='board-container'>
                 <h2>BOARD{showRanking && ` (${hand.getLongName()})`}</h2>
                 <div className='round-name'>{showBoard ? '---' : round.name}</div>
