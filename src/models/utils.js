@@ -105,8 +105,8 @@ export const getFlush = cards => {
  * @returns {Array[Card]|false} - A sorted array of 5 cards (high -> low) that are a straight, or false.
  */
 export const getStraight = (cards, allowWheel = true) => {
-    // Sort cards by rank
-    const sortedCards = sortByRank(cards);
+    // Sort cards by rank and filter out cards with the same rank
+    const sortedCards = sortByRank(cards).filter((card, index, cards) => index === 0 || card.value !== cards[index - 1].value);
 
     // Check if there are 5 cards in a row
     for (let i = 0; i < sortedCards.length - 4; i++) {
