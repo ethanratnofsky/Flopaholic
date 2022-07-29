@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
 .card {
     width: 17vw;
     max-width: 200px;
-    border-radius: 8px;
+    border-radius: 0.5vw;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -11,6 +13,35 @@
 
 .card.shown {
     animation: showRight 0.15s;
+}
+
+div.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 0.688;
+    background-color: white;
+    font-family: 'Roboto Condensed', sans-serif;
+    text-shadow: none;
+    position: relative;
+}
+
+div.card:not(.shown) {
+    background-color: #eb6969;
+    box-sizing: border-box;
+    border: 0.75vw solid white;
+}
+
+div.card .card-rank {
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    font-size: 5vw;
+    letter-spacing: -0.5vw;
+}
+
+div.card .card-suit {
+    font-size: 8vw;
 }
 
 @keyframes showRight {

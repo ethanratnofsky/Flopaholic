@@ -24,6 +24,7 @@ const App = () => {
     const [showRanking, setShowRanking] = useState(false);
 
     const [showOptions, setShowOptions] = useState(false);
+    const [useCardImages, setUseCardImages] = useState(false);
     const [autoEvaluate, setAutoEvaluate] = useState(false);
     const [showBoard, setShowBoard] = useState(false);
     const [showProbabilities, setShowProbabilities] = useState(false);
@@ -85,6 +86,10 @@ const App = () => {
                 <div className={`options-panel${showOptions ? ' slide-right' : ' slide-left'}`}>
                     <h3 className='options-title'>Options</h3>
                     <label>
+                        <input type='checkbox' checked={!useCardImages} onChange={() => setUseCardImages(prev => !prev)} />
+                        Use Simple Cards
+                    </label>
+                    <label>
                         <input type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
                         Auto-Evaluate
                     </label>
@@ -122,7 +127,7 @@ const App = () => {
                         return (
                             <li key={index}>
                                 <div className='card-container'>
-                                    <Card rank={rank} suit={suit} />
+                                    <Card rank={rank} suit={suit} useImage={useCardImages} />
                                 </div>
                             </li>
                         );
@@ -140,7 +145,7 @@ const App = () => {
                     {hole.map((card, index) => (
                             <li key={index}>
                                 <div className='card-container'>
-                                    <Card rank={card.getRank()} suit={card.getSuit()} />
+                                    <Card rank={card.getRank()} suit={card.getSuit()} useImage={useCardImages} />
                                 </div>
                             </li>
                         )
