@@ -6,7 +6,7 @@ import { RANKS, SUITS } from '../constants';
  * @param {Array[Card]} cards - An array of cards.
  * @returns {Array[Card]} A copy of the array of cards sorted by rank.
  */
-export const sortByRank = cards => [...cards].sort((a, b) => b.value - a.value);
+export const sortByRank = cards => [...cards].sort((a, b) => b.getValue() - a.getValue());
 
 /**
  * Groups an array of cards by suit.
@@ -16,7 +16,7 @@ export const sortByRank = cards => [...cards].sort((a, b) => b.value - a.value);
 export const groupBySuit = cards => {
     let groups = {};
     for (const suit of SUITS) {
-        groups[suit] = cards.filter(card => card.suit === suit);
+        groups[suit] = cards.filter(card => card.getSuit() === suit);
     }
     return groups;
 }
@@ -29,7 +29,7 @@ export const groupBySuit = cards => {
 export const groupByRank = cards => {
     let groups = {};
     for (const rank of RANKS) {
-        groups[rank] = cards.filter(card => card.rank === rank);
+        groups[rank] = cards.filter(card => card.getRank() === rank);
     }
     return groups;
 }
@@ -50,15 +50,15 @@ export const getFourOfAKind = cards => {
     
     // Find the highest four of a kind if exists
     for (const group of Object.values(groups)) {
-        if (group.length === 4 && group[0].value > value) {
-            value = group[0].value;
+        if (group.length === 4 && group[0].getValue() > value) {
+            value = group[0].getValue();
             quads = group;
         }
     }
     
     // Four of a kind was found
     if (value >= 0) {
-        const kickers = sortedCards.filter(card => card.value !== value);
+        const kickers = sortedCards.filter(card => card.getValue() !== value);
         return { value, cards: quads, kickers };
     }
 
@@ -106,17 +106,17 @@ export const getFlush = cards => {
  */
 export const getStraight = (cards, allowWheel = true) => {
     // Sort cards by rank and filter out cards with the same rank
-    const sortedCards = sortByRank(cards).filter((card, index, cards) => index === 0 || card.value !== cards[index - 1].value);
+    const sortedCards = sortByRank(cards).filter((card, index, cards) => index === 0 || card.getValue() !== cards[index - 1].getValue());
 
     // Check if there are 5 cards in a row
     for (let i = 0; i < sortedCards.length - 4; i++) {
         const sequence = sortedCards.slice(i, i + 5);
         const [ card_1, card_2, card_3, card_4, card_5 ] = sequence;
 
-        if (card_1.value === card_2.value + 1 &&
-            card_2.value === card_3.value + 1 &&
-            card_3.value === card_4.value + 1 &&
-            card_4.value === card_5.value + 1) {
+        if (card_1.getValue() === card_2.getValue() + 1 &&
+            card_2.getValue() === card_3.getValue() + 1 &&
+            card_3.getValue() === card_4.getValue() + 1 &&
+            card_4.getValue() === card_5.getValue() + 1) {
             return sequence;
         }
     }
@@ -124,11 +124,11 @@ export const getStraight = (cards, allowWheel = true) => {
     // Check for Ace-low straight
     if (allowWheel) {
         const numCards = sortedCards.length;
-        if (sortedCards[0].value === RANKS.length - 1 &&
-            sortedCards[numCards - 1].value === 0 &&
-            sortedCards[numCards - 2].value === 1 &&
-            sortedCards[numCards - 3].value === 2 &&
-            sortedCards[numCards - 4].value === 3) {
+        if (sortedCards[0].getValue() === RANKS.length - 1 &&
+            sortedCards[numCards - 1].getValue() === 0 &&
+            sortedCards[numCards - 2].getValue() === 1 &&
+            sortedCards[numCards - 3].getValue() === 2 &&
+            sortedCards[numCards - 4].getValue() === 3) {
             return [...sortedCards.slice(numCards - 4), sortedCards[0]];
         }
     }
@@ -152,15 +152,15 @@ export const getStraight = (cards, allowWheel = true) => {
     
     // Find the highest three of a kind if exists
     for (const group of Object.values(groups)) {
-        if (group.length === 3 && group[0].value > value) {
-            value = group[0].value;
+        if (group.length === 3 && group[0].getValue() > value) {
+            value = group[0].getValue();
             trips = group;
         }
     }
     
     // Three of a kind was found
     if (value >= 0) {
-        const kickers = sortedCards.filter(card => card.value !== value);
+        const kickers = sortedCards.filter(card => card.getValue() !== value);
         return { value, cards: trips, kickers };
     }
 
@@ -184,15 +184,15 @@ export const getStraight = (cards, allowWheel = true) => {
     
     // Find the highest pair if exists
     for (const group of Object.values(groups)) {
-        if (group.length === 2 && group[0].value > value) {
-            value = group[0].value;
+        if (group.length === 2 && group[0].getValue() > value) {
+            value = group[0].getValue();
             pair = group;
         }
     }
 
     // Pair was found
     if (value >= 0) {
-        const kickers = sortedCards.filter(card => card.value !== value);
+        const kickers = sortedCards.filter(card => card.getValue() !== value);
         return { value, cards: pair, kickers };
     }
 
@@ -207,9 +207,12 @@ export const getStraight = (cards, allowWheel = true) => {
  */
 export const getHighCard = cards => {
     let highest = cards[0];
+    let highestValue = highest.getValue();
     for (const card of cards) {
-        if (card.value > highest.value) {
+        let currentValue = card.getValue();
+        if (card.getValue() > highestValue) {
             highest = card;
+            highestValue = currentValue;
         }
     }
     return highest;

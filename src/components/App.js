@@ -105,13 +105,14 @@ const App = () => {
                     <span className='gear' onClick={() => setShowOptions(prev => !prev)}>⚙</span>
                 </div>
             </div>
-            <ProbabilitiesPanel probabilities={calculateHandProbability(hand, [...deck.cards, ...board.slice(round.numCardsShown)])} hidden={!showProbabilities} />
+            <ProbabilitiesPanel probabilities={calculateHandProbability(hand, [...deck.getCards(), ...board.slice(round.numCardsShown)])} hidden={!showProbabilities} />
             <div className='board-container'>
                 <h2>BOARD{showRanking && ` (${hand.getLongName()})`}</h2>
                 <div className='round-name'>{showBoard ? '---' : round.name}</div>
                 <ul className='board'>
                     {board.map((card, index) => {
-                        let { rank, suit } = card;
+                        let rank = card.getRank();
+                        let suit = card.getSuit();
 
                         // If card is hidden, don't pass rank and suit
                         if (!showBoard && index >= round.numCardsShown) {
@@ -139,7 +140,7 @@ const App = () => {
                     {hole.map((card, index) => (
                             <li key={index}>
                                 <div className='card-container'>
-                                    <Card rank={card.rank} suit={card.suit} />
+                                    <Card rank={card.getRank()} suit={card.getSuit()} />
                                 </div>
                             </li>
                         )

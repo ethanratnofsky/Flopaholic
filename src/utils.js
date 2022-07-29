@@ -67,7 +67,7 @@ export const redealUntil = (ranking) => {
         const handRanking = hand.getShortName();
 
         for (const ranking of Object.values(HAND_RANKINGS)) {
-            probabilities[ranking] = ranking === handRanking ? 1.0000 : 0.0000;
+            probabilities[ranking] = ranking === handRanking ? 1 : 0;
         }
     } else {
         // Initialize counts for each ranking
