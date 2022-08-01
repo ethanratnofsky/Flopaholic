@@ -1,0 +1,39 @@
+.game-summary-container {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    padding: 20px 57px 30px 57px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 25px;
+}
+
+.game-summary-title {
+    color: #ff3232;
+    font-size: 50px;
+    margin-block: 0.5rem;
+}
+
+.game-summary-subtitle {
+    margin-block: 0.1rem;
+}
+
+.game-summary-message {
+    margin-block: 1rem;
+    text-decoration: underline;
+}
+
+.game-summary-list {
+    list-style: none;
+    margin: 0 0 2rem 0;
+    padding: 0;
+    width: 100%;
+}
+
+.game-summary-container .btn {
+    width: 100%;
+}

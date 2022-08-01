@@ -1,0 +1,33 @@
+.game-container, .table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.streak-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 5px 10px;
+    font-size: 20px;
+}
+
+.timer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.guessing-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-block: 12px;
+}
+
+.btn.guess {
+    padding: 8px 16px;
+    font-size: 18px;
+}

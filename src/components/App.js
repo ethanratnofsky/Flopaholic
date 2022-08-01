@@ -7,7 +7,7 @@ import { board, calculateHandProbability, deck, hand, hole, newHand, redealUntil
 import './App.css';
 
 // Components
-import Card from './Card';
+import CardRow from './CardRow';
 import ProbabilitiesPanel from './ProbabilitiesPanel';
 
 // Constants
@@ -114,25 +114,7 @@ const App = () => {
             <div className='board-container'>
                 <h2>BOARD{showRanking && ` (${hand.getLongName()})`}</h2>
                 <div className='round-name'>{showBoard ? '---' : round.name}</div>
-                <ul className='board'>
-                    {board.map((card, index) => {
-                        let rank = card.getRank();
-                        let suit = card.getSuit();
-
-                        // If card is hidden, don't pass rank and suit
-                        if (!showBoard && index >= round.numCardsShown) {
-                            rank = suit = null;
-                        }
-
-                        return (
-                            <li key={index}>
-                                <div className='card-container'>
-                                    <Card rank={rank} suit={suit} useImage={useCardImages} />
-                                </div>
-                            </li>
-                        );
-                    })}
-                </ul>
+                <CardRow cards={board} numCardsShown={showBoard ? board.length : round.numCardsShown} useImages={useCardImages} />
             </div>
             <div className='button-container'>
                 <button className='btn' onClick={handleNextRound} disabled={showBoard}>Next Round</button>
@@ -141,16 +123,7 @@ const App = () => {
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>
-                <ul className='hole'>
-                    {hole.map((card, index) => (
-                            <li key={index}>
-                                <div className='card-container'>
-                                    <Card rank={card.getRank()} suit={card.getSuit()} useImage={useCardImages} />
-                                </div>
-                            </li>
-                        )
-                    )}
-                </ul>
+                <CardRow cards={hole} useImages={useCardImages} />
             </div>
         </div>
     );

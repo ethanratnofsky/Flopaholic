@@ -8,9 +8,19 @@ body {
     font-family: 'VT323', monospace;
 }
 
+h1 {
+    margin-block: 1rem;
+    font-size: 45px;
+}
+
 h2 {
     margin-block: 0.75rem;
     font-size: 40px;
+}
+
+h3 {
+    margin-block: 0.3rem;
+    font-size: 28px;
 }
 
 .slide-left {
