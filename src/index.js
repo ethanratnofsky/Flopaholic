@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import { HashRouter, Navigate, Routes, Route } from 'react-router-dom';
 
 // Styles
 import './index.css';
@@ -13,13 +13,13 @@ import Game from './components/game/Game';
 const container = document.getElementById('app');
 const root = createRoot(container);
 root.render(
-    <BrowserRouter>
+    <HashRouter>
         <Routes>
             <Route path="/" element={<App />} />
             <Route path="game" element={<Game />} />
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-    </BrowserRouter>
+    </HashRouter>
 );
 
 export default App;

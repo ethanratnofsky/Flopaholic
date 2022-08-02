@@ -1,6 +1,9 @@
 {
   "name": "flopaholic",
+  "homepage": "http://ethanratnofsky.github.io/Flopaholic",
+  "description": "",
   "version": "1.0.0",
+  "author": "Ethan Ratnofsky",
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV='production' webpack",
@@ -14,7 +17,6 @@
       "@babel/preset-react"
     ]
   },
-  "author": "Ethan Ratnofsky",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.18.9",
@@ -36,10 +38,8 @@
     "react-router-dom": "^6.3.0",
     "react-timer-hook": "^3.0.5"
   },
-  "description": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ethanratnofsky/Flopaholic.git"
-  },
-  "homepage": "http://ethanratnofsky.github.io/Flopaholic"
+  }
 }
