@@ -18,6 +18,8 @@ import Deck from '../../models/Deck';
 import Hand from '../../models/Hand';
 
 const deck = new Deck();
+let board = [];
+let hole = [];
 let hand;
 
 // Resets and shuffles deck and draws cards for a new hand
@@ -27,11 +29,17 @@ const newHand = () => {
     deck.shuffle();
 
     // Reset hand
-    const cards = [];
-    for (let i = 0; i < 7; i++) {
-        cards.push(deck.draw());
+    board = [];
+    for (let i = 0; i < 5; i++) {
+        board.push(deck.draw());
     }
-    hand = new Hand(cards);
+
+    hole = [];
+    for (let i = 0; i < 2; i++) {
+        hole.push(deck.draw());
+    }
+
+    hand = new Hand([...board, ...hole]);
 }
 
 // Set up initial hand
@@ -141,11 +149,11 @@ const Game = () => {
                     </div>
                     <div className='board-container'>
                         <h3>BOARD</h3>
-                        <CardRow cards={hand.getCards().slice(0, 5)} useImages={useCardImages} />
+                        <CardRow cards={board} useImages={useCardImages} />
                     </div>
                     <div className='hole-container'>
                         <h3>HOLE</h3>
-                        <CardRow cards={hand.getCards().slice(5)} useImages={useCardImages} />
+                        <CardRow cards={hole} useImages={useCardImages} />
                     </div>
                 </div>
                 :
