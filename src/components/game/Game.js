@@ -59,6 +59,7 @@ const Game = () => {
     const [startTime, setStartTime] = useState(Date.now());
     const [answerTime, setAnswerTime] = useState(0);
     const [showOverlayBanner, setShowOverlayBanner] = useState(false);
+    const [showGameSummary, setShowGameSummary] = useState(false);
 
     // Timer hook
     const expiryTimestamp = new Date();
@@ -68,11 +69,15 @@ const Game = () => {
         autoStart: false,
         onExpire: () => {
             // Time's up!
-            setTimeout(() => {
-                setIsGameOver(true);
-            }, 1);
+            setTimeout(handleGameOver, 1);
         }
     });
+
+    // Game over
+    const handleGameOver = () => {
+        setIsGameOver(true);
+        setShowGameSummary(true);
+    }
 
     // Start game
     const handleStart = () => {
@@ -103,7 +108,7 @@ const Game = () => {
             setStreak(prev => prev + 1);
         } else {
             // Incorrect guess
-            setIsGameOver(true);
+            handleGameOver();
         }
     }
 
@@ -122,14 +127,18 @@ const Game = () => {
             {isStarted ? 
                 <div className='table-container'>
                     {isGameOver ? 
-                        <GameSummary 
-                            timeLimit={timeLimit}
-                            streak={streak}
-                            answerTimes={answerTimes}
-                            message={`${seconds === 0 ? 'You ran out of time!' : 'Incorrect!'} The correct hand ranking is ${hand.getLongName()}.`}
-                        /> : 
+                        showGameSummary &&
+                            <GameSummary 
+                                timeLimit={timeLimit}
+                                streak={streak}
+                                answerTimes={answerTimes}
+                                message={`${seconds === 0 ? 'You ran out of time!' : 'Incorrect!'} The correct hand ranking is ${hand.getLongName()}.`}
+                                onClose={() => setShowGameSummary(false)}
+                            /> 
+                        : 
                         <div className='streak-container'>Current Streak: {streak} 🔥</div>
                     }
+                    <div className='streak-container'>Current Streak: {streak} 🔥</div>
                     {showOverlayBanner &&
                         <OverlayBanner
                             title='NICE JOB!'
@@ -142,11 +151,15 @@ const Game = () => {
                     <h2 className='timer' style={{color: isGameOver ? '#ff3232' : isRunning ? 'inherit' : '#02db02'}}>
                         {minutes * 60 + seconds === 0 ? '⌛️ TIME IS UP!' : `⏳ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
                     </h2>
+                    {isGameOver ? 
+                        <button className='btn' onClick={() => setShowGameSummary(true)}>See Results</button>
+                    :
                     <div className='guessing-panel'>
                         {Object.values(HAND_RANKINGS).map((ranking, index) => 
                             <button className='btn guess' key={index} onClick={() => handleUserGuess(ranking)}>{ranking}</button>
                         )}
                     </div>
+                    }
                     <div className='board-container'>
                         <h3>BOARD</h3>
                         <CardRow cards={board} useImages={useCardImages} />
