@@ -36,12 +36,12 @@ div.card .card-rank {
     position: absolute;
     top: 1%;
     left: 5%;
-    font-size: 5vw;
+    font-size: min(6vw, 65px);
     letter-spacing: -0.5vw;
 }
 
 div.card .card-suit {
-    font-size: 8vw;
+    font-size: min(8vw, 90px);
 }
 
 @keyframes showRight {
