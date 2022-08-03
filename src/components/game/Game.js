@@ -6,6 +6,7 @@ import TitleScreen from './TitleScreen';
 import CardRow from '../CardRow';
 import OverlayBanner from './OverlayBanner';
 import GameSummary from './GameSummary';
+import TimerClock from './TimerClock';
 
 // Styles
 import './Game.css';
@@ -132,8 +133,7 @@ const Game = () => {
         <div className='game-container'>
             {isStarted ? 
                 <div className='table-container'>
-                    {isGameOver ? 
-                        showGameSummary &&
+                    {isGameOver && showGameSummary &&
                             <GameSummary 
                                 timeLimit={timeLimit}
                                 timeLimitReached={seconds === 0}
@@ -143,8 +143,6 @@ const Game = () => {
                                 onClose={() => setShowGameSummary(false)}
                                 onRestart={handleStart}
                             /> 
-                        : 
-                        <div className='streak-container'>Current Streak: {streak} 🔥</div>
                     }
                     {showOverlayBanner &&
                         <OverlayBanner
@@ -155,12 +153,10 @@ const Game = () => {
                             onExpire={handleOverlayBannerExpire}
                         />
                     }
-                    <h2 className='timer' style={{color: isGameOver ? '#ff3232' : isRunning ? 'inherit' : '#02db02'}}>
-                        {`${seconds === 0 ? '⌛️' : '⏳'} ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-                    </h2>
+                    <TimerClock minutes={minutes} seconds={seconds} streak={streak} isRunning={isRunning} isGameOver={isGameOver} />
                     <div className='guessing-panel'>
                         {isGameOver ? 
-                            <button className='btn' onClick={() => setShowGameSummary(true)}>See Results</button>
+                            <button className='btn' onClick={() => setShowGameSummary(true)} disabled={showGameSummary}>See Results</button>
                             :
                             Object.values(HAND_RANKINGS).map((ranking, index) => 
                                 <button className='btn' key={index} onClick={() => handleUserGuess(ranking)}>{ranking}</button>
@@ -168,11 +164,9 @@ const Game = () => {
                         }
                     </div>
                     <div className='board-container'>
-                        <h3>BOARD</h3>
                         <CardRow cards={board} useImages={useCardImages} />
                     </div>
                     <div className='hole-container'>
-                        <h3>HOLE</h3>
                         <CardRow cards={hole} useImages={useCardImages} />
                     </div>
                 </div>

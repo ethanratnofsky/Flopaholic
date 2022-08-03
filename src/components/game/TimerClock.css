@@ -1,0 +1,21 @@
+.timer-clock-container {
+    margin-block: 25px 20px;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 15px;
+    height: 1rem;
+    font-size: 30px;
+    box-shadow: 0 0 10px black;
+    width: max-content;
+}
+
+.timer-clock-container .streak {
+    line-height: 1rem;
+}
+
+.timer-clock-container .icon {
+    font-size: 65px;
+}
