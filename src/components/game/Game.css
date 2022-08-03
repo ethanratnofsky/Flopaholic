@@ -27,7 +27,7 @@
     padding-block: 12px;
 }
 
-.btn.guess {
+.guessing-panel .btn {
     padding: 8px 16px;
     font-size: 18px;
 }

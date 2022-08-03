@@ -42,11 +42,8 @@ const newHand = () => {
     hand = new Hand([...board, ...hole]);
 }
 
-// Set up initial hand
-newHand();
-
 // Initialize answer times array
-const answerTimes = [];
+let answerTimes = [];
 
 const Game = () => {
     document.title = 'Flopaholic - The Game';
@@ -82,6 +79,15 @@ const Game = () => {
     // Start game
     const handleStart = () => {
         setIsStarted(true);
+        setIsGameOver(false);
+        setStreak(0);
+        setShowGameSummary(false);
+
+        // Reset answer times array
+        answerTimes = [];
+
+        // Deal new hand
+        newHand();
 
         // Update timer based on time limit
         const timestamp = new Date();
@@ -130,15 +136,16 @@ const Game = () => {
                         showGameSummary &&
                             <GameSummary 
                                 timeLimit={timeLimit}
+                                timeLimitReached={seconds === 0}
                                 streak={streak}
                                 answerTimes={answerTimes}
-                                message={`${seconds === 0 ? 'You ran out of time!' : 'Incorrect!'} The correct hand ranking is ${hand.getLongName()}.`}
+                                message={hand.getLongName()}
                                 onClose={() => setShowGameSummary(false)}
+                                onRestart={handleStart}
                             /> 
                         : 
                         <div className='streak-container'>Current Streak: {streak} 🔥</div>
                     }
-                    <div className='streak-container'>Current Streak: {streak} 🔥</div>
                     {showOverlayBanner &&
                         <OverlayBanner
                             title='NICE JOB!'
@@ -149,17 +156,17 @@ const Game = () => {
                         />
                     }
                     <h2 className='timer' style={{color: isGameOver ? '#ff3232' : isRunning ? 'inherit' : '#02db02'}}>
-                        {minutes * 60 + seconds === 0 ? '⌛️ TIME IS UP!' : `⏳ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+                        {`${seconds === 0 ? '⌛️' : '⏳'} ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
                     </h2>
-                    {isGameOver ? 
-                        <button className='btn' onClick={() => setShowGameSummary(true)}>See Results</button>
-                    :
                     <div className='guessing-panel'>
-                        {Object.values(HAND_RANKINGS).map((ranking, index) => 
-                            <button className='btn guess' key={index} onClick={() => handleUserGuess(ranking)}>{ranking}</button>
-                        )}
+                        {isGameOver ? 
+                            <button className='btn' onClick={() => setShowGameSummary(true)}>See Results</button>
+                            :
+                            Object.values(HAND_RANKINGS).map((ranking, index) => 
+                                <button className='btn' key={index} onClick={() => handleUserGuess(ranking)}>{ranking}</button>
+                            )
+                        }
                     </div>
-                    }
                     <div className='board-container'>
                         <h3>BOARD</h3>
                         <CardRow cards={board} useImages={useCardImages} />

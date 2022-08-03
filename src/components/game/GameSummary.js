@@ -2,21 +2,31 @@ import React from 'react';
 
 import './GameSummary.css';
 
-const GameSummary = ({ timeLimit, streak, answerTimes, message, onClose }) => {
+const GameSummary = ({ timeLimit, timeLimitReached, streak, answerTimes, message, onClose, onRestart }) => {
     const averageAnswerTime = (answerTimes.reduce((acc, time) => acc + time, 0) / answerTimes.length) / 1000 || 0;
 
     return (
         <div className='game-summary-container'>
             <span className='close' onClick={onClose}>X</span>
             <h1 className='game-summary-title'>GAME OVER</h1>
-            <h3 className='game-summary-subtitle'>Summary</h3>
+            <h3 className='game-summary-subtitle'>{timeLimitReached ? '⌛️ Time is up!' : '❌ Incorrect!'}</h3>
             <h4 className='game-summary-message'>{message}</h4>
-            <ul className='game-summary-list'>
-                <li className='game-summary-item'>🔥 Streak: {streak}</li>
-                <li className='game-summary-item'>⏳ Time Limit: {timeLimit} seconds</li>
-                <li className='game-summary-item'>⏱ Average Answer Time: {averageAnswerTime.toFixed(2)}s</li>
-            </ul>
-            <button className='btn main-menu' onClick={() => document.location.reload()}>Main Menu</button>
+            <div className='game-summary-stats'>
+                <ul className='game-summary-stats-names'>
+                    <li className='stat'>Streak: </li>
+                    <li className='stat'>⏳ Time Limit: </li>
+                    <li className='stat'>⏱ Avg. Answer Time: </li>
+                </ul>
+                <ul className='game-summary-stats-values'>
+                    <li className='stat'>{streak} 🔥</li>
+                    <li className='stat'>{timeLimit} seconds</li>
+                    <li className='stat'>{averageAnswerTime.toFixed(2)} seconds</li>
+                </ul>
+            </div>
+            <div className='button-container'>
+                <button className='btn' onClick={onRestart}>Restart</button>
+                <button className='btn' onClick={() => document.location.reload()}>Main Menu</button>
+            </div>
         </div>
     )
 }

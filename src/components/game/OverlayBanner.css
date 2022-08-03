@@ -4,6 +4,7 @@
     text-align: center;
     color: gold;
     text-shadow: 0 0 8px rgba(0, 0, 0, 1);
+    animation: fade-in 0.2s forwards;
 }
 
 .overlay-banner-title {

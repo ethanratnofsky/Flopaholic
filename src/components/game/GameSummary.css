@@ -6,10 +6,13 @@
     align-items: center;
     justify-content: center;
     background: #111;
-    padding: 20px 57px 30px 57px;
+    padding: 20px;
     border-radius: 10px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px black;
     font-size: 25px;
+    width: 70%;
+    max-width: 600px;
+    animation: fade-in 0.5s forwards;
 }
 
 .game-summary-container .close {
@@ -18,31 +21,66 @@
     right: 25px;
     cursor: pointer;
     font-size: 35px;
-    transform:scale(2,1);
+    transform: scale(1.75, 1);
+}
+
+.game-summary-container .close:hover {
+    opacity: 0.8;
 }
 
 .game-summary-title {
     color: #ff3232;
-    font-size: 50px;
+    font-size: 60px;
     margin-block: 0.5rem;
 }
 
 .game-summary-subtitle {
-    margin-block: 0.1rem;
+    margin-block: 0.25rem;
+    text-transform: uppercase;
 }
 
 .game-summary-message {
     margin-block: 1rem;
-    text-decoration: underline;
+    color: gold;
 }
 
-.game-summary-list {
+.game-summary-container ul {
+    display: flex;
+    flex-direction: column;
     list-style: none;
-    margin: 0 0 2rem 0;
+    margin: 0;
     padding: 0;
-    width: 100%;
+    flex: 1;
 }
 
-.game-summary-container .btn.main-menu {
+.game-summary-container .game-summary-stats {
+    margin-block: 0.25rem 1.5rem;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.game-summary-container .game-summary-stats-names {
+    align-items: flex-end;
+    margin-right: 5px;
+}
+
+.game-summary-container .game-summary-stats-values {
+    align-items: flex-start;
+    margin-left: 5px;
+}
+
+.game-summary-stats .stat {
+    line-height: 1rem;
+    margin-block: 0.5rem;
+}
+
+.game-summary-container .button-container {
+    display: flex;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.game-summary-container .button-container .btn {
+    flex: 1;
 }
