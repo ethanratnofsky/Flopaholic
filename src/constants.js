@@ -32,11 +32,3 @@ export const ROUNDS = [
         numCardsShown: 5
     }
 ];
-
-export const TIME_LIMIT = {
-    Easy: 15,
-    Medium: 10,
-    Hard: 5
-}
-
-export const MAX_TIME_LIMIT = 3599;

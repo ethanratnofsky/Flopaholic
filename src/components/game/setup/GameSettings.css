@@ -1,13 +1,8 @@
-.game-container .title-screen-container {
+.game-settings-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    font-size: 22px;
-}
-
-.game-container .intro-container {
     background: #111;
     padding: 10px 30px 15px 30px;
     border-radius: 10px;
@@ -16,24 +11,37 @@
     max-width: 700px;
 }
 
-.game-container .intro-container .intro-title {
+.game-settings-container .game-settings-title {
+    margin-block: 10px;
     text-align: center;
 }
 
-.game-container .start-btn {
-    margin-top: 20px;
-    font-size: 25px;
-}
-
-/* Difficulty Buttons */
-.difficulty-container {
+.game-settings-container .game-settings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.difficulty-container .btn:not(.selected) {
+.game-settings .game-setting {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.game-settings .game-setting.row {
+    flex-direction: row;
+}
+
+.game-setting > * {
+    margin: 2px 15px;
+}
+
+.game-settings-container .btn:not(.selected) {
     opacity: 0.5;
 }
 
@@ -64,7 +72,7 @@
     background-image: linear-gradient(to bottom, #ff0000, #9f0000);
 }
 
-input.time-limit {
+.game-setting input[type=number] {
     text-align: center;
     margin: 10px;
 }

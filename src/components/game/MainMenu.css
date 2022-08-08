@@ -1,0 +1,19 @@
+.main-menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 22px;
+}
+
+.main-menu-container .game-title {
+    font-size: 60px;
+    text-decoration: underline;
+    text-align: center;
+}
+
+.main-menu-container .nav-button-container .btn {
+    margin-top: 20px;
+    font-size: 25px;
+}
