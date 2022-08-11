@@ -47,7 +47,7 @@ const newHand = () => {
 newHand();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const StreakMaster = ({ SMTimeLimit, useCardImages }) => {
+const StreakMaster = ({ SMTimeLimit, useCardImages, numColors }) => {
     // Session state
     const [streak, setStreak] = useState(0);
     const [answerTimes, setAnswerTimes] = useState([]);
@@ -162,10 +162,10 @@ const StreakMaster = ({ SMTimeLimit, useCardImages }) => {
                 }
             </div>
             <div className='board-container'>
-                <CardRow cards={board} useImages={useCardImages} />
+                <CardRow cards={board} useImages={useCardImages} numColors={numColors} />
             </div>
             <div className='hole-container'>
-                <CardRow cards={hole} useImages={useCardImages} />
+                <CardRow cards={hole} useImages={useCardImages} numColors={numColors} />
             </div>
         </div>
     );

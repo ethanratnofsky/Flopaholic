@@ -4,7 +4,7 @@ import './CardRow.css';
 
 import Card from './Card';
 
-const CardRow = ({ cards, numCardsShown, useImages = false }) => {
+const CardRow = ({ cards, numCardsShown, useImages = false, numColors = 2 }) => {
     return (
         <ul className='card-row'>
             {cards.map((card, index) => {
@@ -19,7 +19,7 @@ const CardRow = ({ cards, numCardsShown, useImages = false }) => {
                 return (
                     <li key={index}>
                         <div className='card-container'>
-                            <Card rank={rank} suit={suit} useImage={useImages} />
+                            <Card rank={rank} suit={suit} useImage={useImages} numColors={numColors} />
                         </div>
                     </li>
                 );

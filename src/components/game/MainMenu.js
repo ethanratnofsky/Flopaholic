@@ -22,9 +22,12 @@ const MainMenu = () => {
 
     // General settings state
     const [useCardImages, setUseCardImages] = useState(false);
+    const [numColors, setNumColors] = useState(2);
     const generalSettingsState = {
         useCardImages,
-        setUseCardImages
+        setUseCardImages,
+        numColors,
+        setNumColors,
     }
 
     // Streak Master state

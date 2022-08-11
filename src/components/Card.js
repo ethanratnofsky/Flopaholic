@@ -10,7 +10,43 @@ const suitUnicode = {
     Spades: '♠',
 }
 
-const Card = ({ rank, suit, useImage = false }) => {
+const getColorBySuit = (suit, numColors) => {
+    switch (numColors) {
+        case 1:
+            return 'black';
+            break;
+        case 2:
+            switch (suit) {
+                case 'Clubs':
+                case 'Spades':
+                    return 'black';
+                case 'Diamonds':
+                case 'Hearts':
+                    return 'red';
+                default:
+                    throw new Error(`Invalid suit: ${suit}`);
+            }
+            break;
+        case 4:
+            switch (suit) {
+                case 'Clubs':
+                    return 'green';
+                case 'Diamonds':
+                    return 'blue';
+                case 'Hearts':
+                    return 'red';
+                case 'Spades':
+                    return 'black';
+                default:
+                    throw new Error(`Invalid suit: ${suit}`);
+            }
+            break;
+        default:
+            throw new Error(`Invalid number of colors for deck: ${numColors}`);
+    }
+}
+
+const Card = ({ rank, suit, useImage = false, numColors = 2 }) => {
     const isShown = rank && suit;
 
     if (useImage) {
@@ -28,9 +64,7 @@ const Card = ({ rank, suit, useImage = false }) => {
         }
         return <img className={`card${isShown ? ' shown' : ''}`} src={srcImg} alt={altText} />
     } else {
-        const style = isShown && {
-            color: suit === 'Hearts' || suit === 'Diamonds' ? 'red' : 'black',
-        }
+        const style = isShown && { color: getColorBySuit(suit, numColors) };
         return (
             <div className={`card${isShown ? ' shown' : ''}`} style={style} >
                 <div className='card-rank'>{Number(rank) || rank?.charAt(0)}</div>

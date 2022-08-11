@@ -67,9 +67,14 @@ const GameSettings = ({ gameMode, gameModeState, generalSettingsState }) => {
                         <button className={`btn${generalSettingsState.useCardImages ? ' selected' : ''}`} onClick={() => generalSettingsState.setUseCardImages(true)}>Realistic</button>
                     </div>
                 </li>
-                {/* <li className='game-setting'>
-                    <label className='game-setting-label' htmlFor='deck-colors'># Colors in Deck:</label>
-                </li> */}
+                <li className='game-setting'>
+                    <label className='game-setting-label'>Deck Style</label>
+                    <div className='button-container'>
+                        <button className={`btn${generalSettingsState.numColors === 1 ? ' selected' : ''}`} onClick={() => generalSettingsState.setNumColors(1)}>1-Color</button>
+                        <button className={`btn${generalSettingsState.numColors === 2 ? ' selected' : ''}`} onClick={() => generalSettingsState.setNumColors(2)}>2-Color</button>
+                        <button className={`btn${generalSettingsState.numColors === 4 ? ' selected' : ''}`} onClick={() => generalSettingsState.setNumColors(4)}>4-Color</button>
+                    </div>
+                </li>
             </ul>
             <hr style={{ width: '100%' }}/>
             <h2 className='game-settings-title'>{gameMode} Settings</h2>

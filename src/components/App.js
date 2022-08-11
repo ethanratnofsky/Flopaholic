@@ -25,6 +25,7 @@ const App = () => {
 
     const [showOptions, setShowOptions] = useState(false);
     const [useCardImages, setUseCardImages] = useState(false);
+    const [numColors, setNumColors] = useState(2);
     const [autoEvaluate, setAutoEvaluate] = useState(false);
     const [showBoard, setShowBoard] = useState(false);
     const [showProbabilities, setShowProbabilities] = useState(false);
@@ -85,22 +86,30 @@ const App = () => {
             <div className='options-container'>
                 <div className={`options-panel${showOptions ? ' slide-right' : ' slide-left'}`}>
                     <h3 className='options-title'>Options</h3>
-                    <label>
-                        <input type='checkbox' checked={!useCardImages} onChange={() => setUseCardImages(prev => !prev)} />
-                        Use Simple Cards
-                    </label>
-                    <label>
-                        <input type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
-                        Auto-Evaluate
-                    </label>
-                    <label>
-                        <input type='checkbox' checked={showBoard} onChange={() => setShowBoard(prev => !prev)} />
-                        Show Board
-                    </label>
-                    <label>
-                        <input type='checkbox' checked={showProbabilities} onChange={() => setShowProbabilities(prev => !prev)} />
-                        Show Probabilities
-                    </label>
+                    <div className='option'>
+                        <input id='card-image-option' type='checkbox' checked={!useCardImages} onChange={() => setUseCardImages(prev => !prev)} />
+                        <label htmlFor='card-image-option'>Use Simple Cards</label>
+                    </div>
+                    <div className='option'>
+                        <select id='num-colors-option' value={numColors} onChange={(e) => setNumColors(Number(e.target.value))}>
+                            <option value={1}>1-Color</option>
+                            <option value={2}>2-Color</option>
+                            <option value={4}>4-Color</option>
+                        </select>
+                        <label htmlFor='num-colors-option'>Deck Style</label>
+                    </div>
+                    <div className='option'>
+                        <input id='auto-evaluate-option' type='checkbox' checked={autoEvaluate} onChange={() => setAutoEvaluate(prev => !prev)} />
+                        <label htmlFor='auto-evaluate-option'>Auto Evaluate</label>
+                    </div>
+                    <div className='option'>
+                        <input id='show-board-option' type='checkbox' checked={showBoard} onChange={() => setShowBoard(prev => !prev)} />
+                        <label htmlFor='show-board-option'>Show Board</label>
+                    </div>
+                    <div className='option'>
+                        <input id='show-probabilities-option' type='checkbox' checked={showProbabilities} onChange={() => setShowProbabilities(prev => !prev)} />
+                        <label htmlFor='show-probabilities-option'>Show Probabilities</label>
+                    </div>
                     <h4>Redeal Until...</h4>
                     {Object.values(HAND_RANKINGS).map((ranking, index) => (
                         <button key={index} onClick={() => {redealUntil(ranking); setShowBoard(true); setAutoEvaluate(true); forceUpdate();}}>{ranking}</button>
@@ -114,7 +123,7 @@ const App = () => {
             <div className='board-container'>
                 <h2>BOARD{showRanking && ` (${hand.getLongName()})`}</h2>
                 <div className='round-name'>{showBoard ? '---' : round.name}</div>
-                <CardRow cards={board} numCardsShown={showBoard ? board.length : round.numCardsShown} useImages={useCardImages} />
+                <CardRow cards={board} numCardsShown={showBoard ? board.length : round.numCardsShown} useImages={useCardImages} numColors={numColors} />
             </div>
             <div className='button-container'>
                 <button className='btn' onClick={handleNextRound} disabled={showBoard}>Next Round</button>
@@ -123,7 +132,7 @@ const App = () => {
             </div>
             <div className='hole-container'>
                 <h2>HOLE</h2>
-                <CardRow cards={hole} useImages={useCardImages} />
+                <CardRow cards={hole} useImages={useCardImages} numColors={numColors} />
             </div>
         </div>
     );

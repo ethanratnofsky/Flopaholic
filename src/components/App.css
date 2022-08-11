@@ -65,6 +65,10 @@
     text-decoration: underline;
 }
 
+.option label {
+    margin-left: 5px;
+}
+
 /* Board and Hole */
 .board-container, .hole-container {
     display: flex;
